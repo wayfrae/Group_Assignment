@@ -12,18 +12,36 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using Group_Assignment.Items;
+using Group_Assignment.Main;
+using Group_Assignment.Search;
 
 namespace Group_Assignment
 {
     /// <summary>
     /// Interaction logic for MainWindow.xaml
     /// </summary>
-    public partial class MainWindow : Window
+    public partial class wndMain : Window
     {
-        public MainWindow()
+        /// <summary>
+        /// Class to hold window for items
+        /// </summary>
+        wndItems windowItems;
+
+        /// <summary>
+        /// Class to hold window for search
+        /// </summary>
+        wndSearch windowSearch;
+
+        /// <summary>
+        /// Constructor for main window
+        /// </summary>
+        public wndMain()
         {
-            //comment hello
             InitializeComponent();
+
+            windowItems = new wndItems();
+            windowSearch = new wndSearch();
         }
     }
 }
