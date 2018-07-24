@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
@@ -38,10 +40,83 @@ namespace Group_Assignment
         /// </summary>
         public wndMain()
         {
-            InitializeComponent();
+            try
+            {
+                InitializeComponent();
+                Application.Current.ShutdownMode = ShutdownMode.OnMainWindowClose;
+                windowItems = new wndItems();
+                windowSearch = new wndSearch();
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(MethodInfo.GetCurrentMethod().DeclaringType.Name + "."
+                    + MethodInfo.GetCurrentMethod().Name + " -> " + ex.Message);
+            }
+        }
 
-            windowItems = new wndItems();
-            windowSearch = new wndSearch();
+        /// <summary>
+        /// Opens Items Window
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void MenuItemUpdateItems_Click(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                windowItems.Left = this.Left;
+                windowItems.Top = this.Top;
+                this.Hide();
+                windowItems.ShowDialog();
+                this.Left = windowItems.Left;
+                this.Top = windowItems.Top;
+                this.Show();
+            }
+            catch (Exception ex)
+            {
+                HandleException(MethodInfo.GetCurrentMethod().DeclaringType.Name, MethodInfo.GetCurrentMethod().Name, ex.Message);
+            }
+        }
+
+        /// <summary>
+        /// Opens Search Window
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void MenuItemSearch_Click(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                windowSearch.Left = this.Left;
+                windowSearch.Top = this.Top;
+                this.Hide();
+                windowSearch.ShowDialog();
+                this.Left = windowSearch.Left;
+                this.Top = windowSearch.Top;
+                this.Show();
+            }
+            catch (Exception ex)
+            {
+                HandleException(MethodInfo.GetCurrentMethod().DeclaringType.Name, MethodInfo.GetCurrentMethod().Name, ex.Message);
+            }
+        }
+
+        /// <summary>
+        /// Handles the exception by showing a message box with user friendly stack trace. Will write to Console.Error if message box fails.
+        /// </summary>
+        /// <param name="className">The name of the calling class.</param>
+        /// <param name="methodName">The name of the method.</param>
+        /// <param name="message">The message associated with the exception.</param>
+        private void HandleException(string className, string methodName, string message)
+        {
+            try
+            {
+                MessageBox.Show(className + "." + methodName + " -> " + message);
+            }
+            catch (Exception ex)
+            {
+                TextWriter errorWriter = Console.Error;
+                errorWriter.WriteLine("HandleError Exception: " + ex.Message);
+            }
         }
     }
 }

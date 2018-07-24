@@ -3,10 +3,51 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+         TextElement.Foreground="{DynamicResource MaterialDesignBody}"
+         TextElement.FontWeight="Regular"
+         TextElement.FontSize="13"
+         TextOptions.TextFormattingMode="Ideal"
+         TextOptions.TextRenderingMode="Auto"
+         Background="{DynamicResource MaterialDesignPaper}"
+         FontFamily="{DynamicResource MaterialDesignFont}"
         xmlns:local="clr-namespace:Group_Assignment"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
+        Title="Invoice" Height="450" Width="800">
     <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition />
+            <RowDefinition />
+            <RowDefinition />
+            <RowDefinition />
+            <RowDefinition />
+            <RowDefinition />
+            <RowDefinition />
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition/>
+            <ColumnDefinition/>
+            <ColumnDefinition/>
+            <ColumnDefinition/>
+            <ColumnDefinition/>
+            <ColumnDefinition/>
+            <ColumnDefinition/>
+            <ColumnDefinition/>
+        </Grid.ColumnDefinitions>
+
+        <Menu Grid.ColumnSpan="8">
+            <MenuItem Header="Menu">
+                <MenuItem Header="Update Items" Click="MenuItemUpdateItems_Click"/>
+                <MenuItem Header="Search" Click="MenuItemSearch_Click"/>
+            </MenuItem>
+        </Menu>
+
+        <Label Grid.Column="2" Grid.Row="1" Grid.ColumnSpan="4" FontSize="25" Content="A+ Jewelry Company" HorizontalContentAlignment="Center" />
+        <StackPanel  Grid.Column="6" Grid.Row="1" Grid.ColumnSpan="2">
+            <Label Content="Invoice Number" HorizontalContentAlignment="Center" />
+            <Label Content="000000" HorizontalContentAlignment="Center" FontSize="25" Margin="0,-15,0,0"/>
+        </StackPanel>
         
     </Grid>
+
 </Window>
