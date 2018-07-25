@@ -4,50 +4,75 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
-         TextElement.Foreground="{DynamicResource MaterialDesignBody}"
-         TextElement.FontWeight="Regular"
-         TextElement.FontSize="13"
-         TextOptions.TextFormattingMode="Ideal"
-         TextOptions.TextRenderingMode="Auto"
-         Background="{DynamicResource MaterialDesignPaper}"
-         FontFamily="{DynamicResource MaterialDesignFont}"
+        TextElement.FontWeight="Regular"
+        TextElement.FontSize="13"
+        TextElement.Foreground="{DynamicResource MaterialDesignBody}"
+        TextOptions.TextFormattingMode="Ideal"
+        TextOptions.TextRenderingMode="Auto"
+        Background="{DynamicResource MaterialDesignPaper}"
+        FontFamily="{DynamicResource MaterialDesignFont}"
         xmlns:local="clr-namespace:Group_Assignment"
         mc:Ignorable="d"
-        Title="Invoice" Height="450" Width="800">
-    <Grid>
-        <Grid.RowDefinitions>
-            <RowDefinition />
-            <RowDefinition />
-            <RowDefinition />
-            <RowDefinition />
-            <RowDefinition />
-            <RowDefinition />
-            <RowDefinition />
-        </Grid.RowDefinitions>
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition/>
-            <ColumnDefinition/>
-            <ColumnDefinition/>
-            <ColumnDefinition/>
-            <ColumnDefinition/>
-            <ColumnDefinition/>
-            <ColumnDefinition/>
-            <ColumnDefinition/>
-        </Grid.ColumnDefinitions>
+        Title="Invoice" Height="800" Width="1100">
 
-        <Menu Grid.ColumnSpan="8">
-            <MenuItem Header="Menu">
-                <MenuItem Header="Update Items" Click="MenuItemUpdateItems_Click"/>
-                <MenuItem Header="Search" Click="MenuItemSearch_Click"/>
-            </MenuItem>
-        </Menu>
-
-        <Label Grid.Column="2" Grid.Row="1" Grid.ColumnSpan="4" FontSize="25" Content="A+ Jewelry Company" HorizontalContentAlignment="Center" />
-        <StackPanel  Grid.Column="6" Grid.Row="1" Grid.ColumnSpan="2">
-            <Label Content="Invoice Number" HorizontalContentAlignment="Center" />
-            <Label Content="000000" HorizontalContentAlignment="Center" FontSize="25" Margin="0,-15,0,0"/>
-        </StackPanel>
-        
-    </Grid>
+    <materialDesign:DialogHost>
+        <materialDesign:DrawerHost IsLeftDrawerOpen="{Binding ElementName=MenuToggleButton, Path=IsChecked}">
+            <materialDesign:DrawerHost.LeftDrawerContent>
+                <DockPanel MinWidth="212">
+                    <ToggleButton Style="{StaticResource MaterialDesignHamburgerToggleButton}" 
+                                    DockPanel.Dock="Top"
+                                    HorizontalAlignment="Right" Margin="16"
+                                    IsChecked="{Binding ElementName=MenuToggleButton, Path=IsChecked, Mode=TwoWay}" />
+                    <StackPanel>
+                        <MenuItem Header="Edit Items" />
+                        <MenuItem Header="Search" />
+                    </StackPanel>                    
+                </DockPanel>
+            </materialDesign:DrawerHost.LeftDrawerContent>
+            <DockPanel>
+                <materialDesign:ColorZone Padding="16" materialDesign:ShadowAssist.ShadowDepth="Depth2" Mode="PrimaryMid" DockPanel.Dock="Top">
+                    <DockPanel>
+                        <ToggleButton Style="{StaticResource MaterialDesignHamburgerToggleButton}" IsChecked="False" x:Name="MenuToggleButton"/>                        
+                        <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="22">The Jewelry Company Invoice</TextBlock>
+                    </DockPanel>
+                </materialDesign:ColorZone>
+                
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition />
+                        <RowDefinition />
+                        <RowDefinition />
+                        <RowDefinition />
+                        <RowDefinition />
+                        <RowDefinition />
+                        <RowDefinition />
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition/>
+                        <ColumnDefinition/>
+                        <ColumnDefinition/>
+                        <ColumnDefinition/>
+                        <ColumnDefinition/>
+                        <ColumnDefinition/>
+                        <ColumnDefinition/>
+                        <ColumnDefinition/>
+                        <ColumnDefinition/>
+                        <ColumnDefinition/>
+                        <ColumnDefinition/>
+                        <ColumnDefinition/>
+                    </Grid.ColumnDefinitions>
+                    <StackPanel Grid.Column="10" Grid.ColumnSpan="2" HorizontalAlignment="Stretch">
+                        <Label Content="Invoice Number" FontSize="18" HorizontalContentAlignment="Center"/>
+                        <Label Content="00000" FontSize="40" HorizontalContentAlignment="Center"/>
+                        <Label Content="Date: 01/01/2018" FontSize="18" HorizontalContentAlignment="Center"/>
+                    </StackPanel>
+                    <Button Grid.Column="11" Grid.Row="5" Style="{StaticResource MaterialDesignFloatingActionAccentButton}"  ToolTip="MaterialDesignFloatingActionAccentButton">
+                        <materialDesign:PackIcon   Kind="Plus"     Height="24"    Width="24" />
+                    </Button>
+                    <materialDesign:Snackbar MessageQueue="{materialDesign:MessageQueue}" x:Name="MainSnackbar" Grid.Row="1" />
+                </Grid>
+            </DockPanel>
+        </materialDesign:DrawerHost>
+    </materialDesign:DialogHost>
 
 </Window>
