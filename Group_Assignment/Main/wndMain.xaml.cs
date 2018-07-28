@@ -37,6 +37,8 @@ namespace Group_Assignment
         /// </summary>
         wndSearch windowSearch;
 
+        clsMainLogic mainLogic;
+
         /// <summary>
         /// Constructor for main window
         /// </summary>
@@ -48,11 +50,13 @@ namespace Group_Assignment
                 Application.Current.ShutdownMode = ShutdownMode.OnMainWindowClose;
                 windowItems = new wndItems();
                 windowSearch = new wndSearch();
+                mainLogic = new clsMainLogic();
+                StackPanelMain.DataContext = mainLogic;
+                ComboBoxItems.ItemsSource = mainLogic.Items;
             }
             catch (Exception ex)
             {
-                throw new Exception(MethodInfo.GetCurrentMethod().DeclaringType.Name + "."
-                    + MethodInfo.GetCurrentMethod().Name + " -> " + ex.Message);
+                HandleException(MethodInfo.GetCurrentMethod().DeclaringType.Name, MethodInfo.GetCurrentMethod().Name, ex.Message);
             }
         }
 
@@ -133,6 +137,6 @@ namespace Group_Assignment
                 TextWriter errorWriter = Console.Error;
                 errorWriter.WriteLine("HandleError Exception: " + ex.Message);
             }
-        }
+        }        
     }
 }
