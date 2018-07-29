@@ -21,17 +21,13 @@
                         IsChecked="{Binding ElementName=MenuToggleButton, Path=IsChecked, Mode=TwoWay}"
                         Style="{StaticResource MaterialDesignHamburgerToggleButton}" />
                     <StackPanel>
-                        <MenuItem Header="Edit Items" />
-                        <MenuItem Header="Search" />
+                        <MenuItem Header="Edit Items" Click="MenuItemUpdateItems_Click"/>
+                        <MenuItem Header="Search" Click="MenuItemSearch_Click" />
                     </StackPanel>
                 </DockPanel>
             </materialDesign:DrawerHost.LeftDrawerContent>
             <DockPanel>
-                <materialDesign:ColorZone
-                    Padding="16"
-                    materialDesign:ShadowAssist.ShadowDepth="Depth2"
-                    DockPanel.Dock="Top"
-                    Mode="PrimaryMid">
+                <materialDesign:ColorZone Style="{StaticResource TopMenuBar}">
                     <DockPanel>
                         <ToggleButton
                             x:Name="MenuToggleButton"
@@ -70,7 +66,8 @@
                                             x:Name="ComboBoxItems"
                                             MinWidth="500"
                                             Header="Description"
-                                            SelectedValueBinding="{Binding ItemOnLine}" 
+                                            
+                                            SelectedValueBinding="{Binding ItemOnLine, UpdateSourceTrigger=PropertyChanged}" 
                                             TextBinding="{Binding ItemOnLine.Description}" />
 
                                         <materialDesign:MaterialDataGridTextColumn
@@ -89,11 +86,12 @@
                             <Button ToolTip="Create new invoice">
                                 <materialDesign:PackIcon Kind="Plus" />
                             </Button>
-                            <Button>
+                            
+                            <Button Name="ButtonEditInvoice" ToolTip="Edit current invoice">
                                 <ToggleButton 
-                                    Name="EditInvoice"
-                                    ToolTip="Edit current invoice"                                     
-                                    Style="{StaticResource MaterialDesignActionLightToggleButton}">                                   
+                                Name="EditInvoice"                                
+                                Click="EditInvoice_Click"
+                                Style="{StaticResource EditSaveToggle}">
                                     <ToggleButton.Content>
                                         <materialDesign:PackIcon Kind="Pencil"/>
                                     </ToggleButton.Content>
@@ -101,12 +99,13 @@
                                         <materialDesign:PackIcon Kind="ContentSave"/>
                                     </materialDesign:ToggleButtonAssist.OnContent>
                                 </ToggleButton>
-                            </Button>
-                            <Button ToolTip="Delete current invoice">
+                            </Button>                            
+
+                            <Button ToolTip="Delete invoice">
                                 <materialDesign:PackIcon Kind="Delete" />
                             </Button>
                         </StackPanel>
-                    </materialDesign:PopupBox>
+                    </materialDesign:PopupBox>                    
                 </Grid>
             </DockPanel>
         </materialDesign:DrawerHost>

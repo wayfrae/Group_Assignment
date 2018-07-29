@@ -37,6 +37,9 @@ namespace Group_Assignment
         /// </summary>
         wndSearch windowSearch;
 
+        /// <summary>
+        /// Class to hold all business logic
+        /// </summary>
         clsMainLogic mainLogic;
 
         /// <summary>
@@ -82,21 +85,7 @@ namespace Group_Assignment
                 HandleException(MethodInfo.GetCurrentMethod().DeclaringType.Name, MethodInfo.GetCurrentMethod().Name, ex.Message);
             }
         }
-
-        private void UIElement_OnPreviewMouseLeftButtonUp(object sender, MouseButtonEventArgs e)
-        {
-            //until we had a StaysOpen glag to Drawer, this will help with scroll bars
-            var dependencyObject = Mouse.Captured as DependencyObject;
-            while (dependencyObject != null)
-            {
-                if (dependencyObject is ScrollBar) return;
-                dependencyObject = VisualTreeHelper.GetParent(dependencyObject);
-            }
-
-            MenuToggleButton.IsChecked = false;
-        }
-                
-
+        
         /// <summary>
         /// Opens Search Window
         /// </summary>
@@ -121,6 +110,32 @@ namespace Group_Assignment
         }
 
         /// <summary>
+        /// Allows the datagrid to be edited
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void EditInvoice_Click(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                if (EditInvoice.IsChecked == true)
+                {
+                    DataGridOrderSummary.CanUserAddRows = true;
+                    ButtonEditInvoice.ToolTip = "Save Invoice";
+                }
+                else
+                {
+                    DataGridOrderSummary.CanUserAddRows = false;
+                    ButtonEditInvoice.ToolTip = "Edit Invoice";
+                }
+            }
+            catch (Exception ex)
+            {
+                HandleException(MethodInfo.GetCurrentMethod().DeclaringType.Name, MethodInfo.GetCurrentMethod().Name, ex.Message);
+            }
+        }
+
+        /// <summary>
         /// Handles the exception by showing a message box with user friendly stack trace. Will write to Console.Error if message box fails.
         /// </summary>
         /// <param name="className">The name of the calling class.</param>
@@ -137,6 +152,8 @@ namespace Group_Assignment
                 TextWriter errorWriter = Console.Error;
                 errorWriter.WriteLine("HandleError Exception: " + ex.Message);
             }
-        }        
+        }
+
+        
     }
 }

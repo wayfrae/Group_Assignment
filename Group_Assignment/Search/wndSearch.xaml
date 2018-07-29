@@ -4,9 +4,43 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Group_Assignment.Search"
+        xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
         mc:Ignorable="d"
-        Title="wndSearch" Height="450" Width="800">
-    <Grid>
-        
-    </Grid>
+        Style="{StaticResource CustomWindow}"  
+        Title="wndSearch" >
+    <DockPanel>
+        <materialDesign:ColorZone Style="{StaticResource TopMenuBar}">
+            <DockPanel>
+                <TextBlock>
+                    Search Invoices
+                </TextBlock>
+            </DockPanel>
+        </materialDesign:ColorZone>
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition />
+                <ColumnDefinition />
+                <ColumnDefinition MinWidth="300"/>
+            </Grid.ColumnDefinitions>
+
+            <DataGrid Style="{StaticResource SearchDataGrid}" Grid.ColumnSpan="2" />
+            <StackPanel Grid.Column="2" Style="{StaticResource SearchStackPanel}" >
+                <ComboBox materialDesign:HintAssist.Hint="Tooltip Goes Here" />
+                <ComboBox materialDesign:HintAssist.Hint="Tooltip Goes Here" />
+                <ComboBox materialDesign:HintAssist.Hint="Tooltip Goes Here" />
+                <Grid Grid.Column="2" >
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition/>
+                        <ColumnDefinition/>
+                    </Grid.ColumnDefinitions>
+                    <Button 
+                        Content="Select" 
+                        Grid.Column="0"/>
+                    <Button 
+                        Content="Cancel"
+                        Grid.Column="1"/>
+                </Grid>
+            </StackPanel>
+        </Grid>
+    </DockPanel>
 </Window>

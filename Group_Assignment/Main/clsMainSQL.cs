@@ -63,5 +63,30 @@ namespace Group_Assignment.Main
         {
             return "INSERT INTO LineItems(InvoiceNum, LineItemNum, ItemCode) VALUES(" + invoiceNumber + ", " + position + ", " + itemCode + ")";
         }
+
+         /// <summary>
+         /// Returns an SQL update string to edit an entry to the LineItems table
+         /// </summary>
+         /// <param name="invoiceNumber">the invoice number to update</param>
+         /// <param name="position">the line position to update</param>
+         /// <param name="itemCode">the item code to update</param>
+         /// <returns></returns>
+        public string UpdateLineItems(string invoiceNumber, int position, string itemCode)
+        {
+            return "UPDATE LineItems SET LineItemNum=" + position + ", ItemCode=" + itemCode + "WHERE InvoiceNum=" + invoiceNumber;
+        }
+
+        /// <summary>
+        /// Returns an SQL update string to edit an entry to the Invoices table
+        /// </summary>
+        /// <param name="invoiceNumber">invoice number to edit</param>
+        /// <param name="date">date to edit</param>
+        /// <returns>SQL update string to add an entry to the Invoices table</returns>
+        public string UpdateInvoices(string invoiceNumber, DateTime date)
+        {
+            return "UPDATE Invoices SET Date=" + date.Date.ToOADate() + " WHERE InvoiceNum=" + invoiceNumber;
+        }
+
+
     }
 }
