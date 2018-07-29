@@ -5,8 +5,15 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Group_Assignment"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
+        Title="Items Page
+        " Height="603.814" Width="826.695">
     <Grid>
-        
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition/>
+        </Grid.ColumnDefinitions>
+        <DataGrid HorizontalAlignment="Left" Height="467" Margin="52,58,0,0" VerticalAlignment="Top" Width="592"/>
+        <Button Content="Add Item" HorizontalAlignment="Left" Margin="693,58,0,0" VerticalAlignment="Top" Width="75"/>
+        <Button Content="Save Changes" HorizontalAlignment="Left" Margin="693,121,0,0" VerticalAlignment="Top" Width="75"/>
+
     </Grid>
 </Window>
