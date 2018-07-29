@@ -19,8 +19,5 @@ namespace Group_Assignment.Items
             string sSQL = "SELECT * FROM Invoices WHERE InvoiceNum = " + sInvoiceID;
             return sSQL;
         }
-
-
-
     }
 }

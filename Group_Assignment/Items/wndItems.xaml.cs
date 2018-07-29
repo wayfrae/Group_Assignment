@@ -28,5 +28,26 @@ namespace Group_Assignment.Items
         {
             InitializeComponent();
         }
+
+        /// <summary>
+        /// Hides the window instead of closing it
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
+        {
+            e.Cancel = true;
+            this.Hide();
+        }
+
+        /// <summary>
+        /// Hides the window
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void Button_Click(object sender, RoutedEventArgs e)
+        {
+            this.Hide();
+        }
     }
 }

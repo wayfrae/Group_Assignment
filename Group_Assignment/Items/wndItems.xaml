@@ -7,6 +7,7 @@
         xmlns:local="clr-namespace:Group_Assignment"
         mc:Ignorable="d"
         Title="Items Page" 
+        Closing="Window_Closing"
         Style="{StaticResource CustomWindow}">
     <DockPanel>
         <materialDesign:ColorZone Style="{StaticResource TopMenuBar}">
@@ -25,7 +26,7 @@
             <StackPanel Style="{StaticResource ItemsStackPanel}" Grid.Column="1">
                 <Button Content="Add Item"  />
                 <Button Content="Save Changes" />
-                <Button Content="Close Window" />
+                <Button Content="Close Window" Click="Button_Click" />
             </StackPanel>
         </Grid>
     </DockPanel>

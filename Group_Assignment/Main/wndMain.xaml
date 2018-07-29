@@ -58,6 +58,7 @@
                             <StackPanel>
                                 <TextBlock>Order Summary</TextBlock>
                                 <DataGrid
+                                    Style="{StaticResource InvoiceDataGrid}"
                                     x:Name="DataGridOrderSummary"                                    
                                     ItemsSource="{Binding CurrentInvoice.LineItems}">
                                     

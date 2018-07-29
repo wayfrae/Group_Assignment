@@ -6,7 +6,8 @@
         xmlns:local="clr-namespace:Group_Assignment.Search"
         xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
         mc:Ignorable="d"
-        Style="{StaticResource CustomWindow}"  
+        Style="{StaticResource CustomWindow}"
+        Closing="Window_Closing"
         Title="wndSearch" >
     <DockPanel>
         <materialDesign:ColorZone Style="{StaticResource TopMenuBar}">
