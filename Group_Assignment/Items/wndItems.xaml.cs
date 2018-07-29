@@ -19,6 +19,11 @@ namespace Group_Assignment.Items
     /// </summary>
     public partial class wndItems : Window
     {
+        /// <summary>
+        /// boolean value to store if an item has changed to let the main window know if it needs to update the items list
+        /// </summary>
+        public bool HasChanged { get; set; }
+
         public wndItems()
         {
             InitializeComponent();

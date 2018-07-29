@@ -3,10 +3,30 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:Group_Assignment.Items"
+        xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"        
+        xmlns:local="clr-namespace:Group_Assignment"
         mc:Ignorable="d"
-        Title="wndItems" Height="450" Width="800">
-    <Grid>
-        
-    </Grid>
+        Title="Items Page" 
+        Style="{StaticResource CustomWindow}">
+    <DockPanel>
+        <materialDesign:ColorZone Style="{StaticResource TopMenuBar}">
+            <DockPanel>
+                <TextBlock>
+                    Edit Items
+                </TextBlock>
+            </DockPanel>
+        </materialDesign:ColorZone>
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition />
+                <ColumnDefinition Width="200"/>
+            </Grid.ColumnDefinitions>
+            <DataGrid Style="{StaticResource SearchDataGrid}" />
+            <StackPanel Style="{StaticResource ItemsStackPanel}" Grid.Column="1">
+                <Button Content="Add Item"  />
+                <Button Content="Save Changes" />
+                <Button Content="Close Window" />
+            </StackPanel>
+        </Grid>
+    </DockPanel>
 </Window>

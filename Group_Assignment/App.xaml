@@ -68,6 +68,18 @@
                     </Style>
                 </Style.Resources>
             </Style>
+            
+            <Style TargetType="StackPanel" x:Key="ItemsStackPanel" >
+                <Setter Property="Margin" Value="0,40,0,0" />
+                <Setter Property="HorizontalAlignment" Value="Center" />
+                <Style.Resources>
+                    <Style TargetType="Button" BasedOn="{StaticResource MaterialDesignRaisedButton}">
+                        <Setter Property="Width" Value="150" />
+                        <Setter Property="Margin" Value="10" />
+                    </Style>
+                </Style.Resources>
+            </Style>
+                
             <Style TargetType="DataGrid" x:Key="SearchDataGrid" BasedOn="{StaticResource MaterialDesignDataGrid}">
                 <Setter Property="Margin" Value="10" />
             </Style>
