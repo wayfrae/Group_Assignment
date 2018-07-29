@@ -19,6 +19,11 @@ namespace Group_Assignment.Search
     /// </summary>
     public partial class wndSearch : Window
     {
+        /// <summary>
+        /// Holds the invoice selected from this window to be passed into the main window.
+        /// </summary>
+        public string InvoiceNumber { get; set; }
+
         public wndSearch()
         {
             InitializeComponent();
