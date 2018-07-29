@@ -1,12 +1,113 @@
-﻿<Window x:Class="Group_Assignment.MainWindow"
-        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:Group_Assignment"
-        mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
-    <Grid>
-        
-    </Grid>
+﻿<Window
+    x:Class="Group_Assignment.wndMain"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:local="clr-namespace:Group_Assignment"
+    xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    Title="Invoice"
+    Style="{StaticResource CustomWindow}"    
+    mc:Ignorable="d">
+
+    <materialDesign:DialogHost>
+        <materialDesign:DrawerHost IsLeftDrawerOpen="{Binding ElementName=MenuToggleButton, Path=IsChecked}">
+            <materialDesign:DrawerHost.LeftDrawerContent>
+                <DockPanel MinWidth="212">
+                    <ToggleButton
+                        Margin="16"
+                        HorizontalAlignment="Right"
+                        DockPanel.Dock="Top"
+                        IsChecked="{Binding ElementName=MenuToggleButton, Path=IsChecked, Mode=TwoWay}"
+                        Style="{StaticResource MaterialDesignHamburgerToggleButton}" />
+                    <StackPanel>
+                        <MenuItem Header="Edit Items" Click="MenuItemUpdateItems_Click"/>
+                        <MenuItem Header="Search" Click="MenuItemSearch_Click" />
+                    </StackPanel>
+                </DockPanel>
+            </materialDesign:DrawerHost.LeftDrawerContent>
+            <DockPanel>
+                <materialDesign:ColorZone Style="{StaticResource TopMenuBar}">
+                    <DockPanel>
+                        <ToggleButton
+                            x:Name="MenuToggleButton"
+                            IsChecked="False"
+                            Style="{StaticResource MaterialDesignHamburgerToggleButton}" />
+                        <TextBlock
+                            HorizontalAlignment="Center"
+                            VerticalAlignment="Center"
+                            FontSize="22">
+                            The Jewelry Company Invoice
+                        </TextBlock>
+                    </DockPanel>
+                </materialDesign:ColorZone>
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition />
+                        <ColumnDefinition />
+                    </Grid.ColumnDefinitions>
+                    <StackPanel x:Name="StackPanelMain">
+                        <TextBlock Style="{StaticResource MaterialDesignTitleTextBlock}">
+                            Invoice Number
+                        </TextBlock>
+                        <TextBlock 
+                            Style="{StaticResource MaterialDesignDisplay2TextBlock}" 
+                            Text="{Binding CurrentInvoice.Number, UpdateSourceTrigger=PropertyChanged}" />
+                        <DatePicker Text="{Binding CurrentInvoice.Date}" />
+                        <materialDesign:Card>
+                            <StackPanel>
+                                <TextBlock>Order Summary</TextBlock>
+                                <DataGrid
+                                    x:Name="DataGridOrderSummary"                                    
+                                    ItemsSource="{Binding CurrentInvoice.LineItems}">
+                                    
+                                    <DataGrid.Columns>
+                                        <materialDesign:MaterialDataGridComboBoxColumn
+                                            x:Name="ComboBoxItems"
+                                            MinWidth="500"
+                                            Header="Description"
+                                            
+                                            SelectedValueBinding="{Binding ItemOnLine, UpdateSourceTrigger=PropertyChanged}" 
+                                            TextBinding="{Binding ItemOnLine.Description}" />
+
+                                        <materialDesign:MaterialDataGridTextColumn
+                                            Binding="{Binding ItemOnLine.PriceString}"
+                                            EditingElementStyle="{StaticResource MaterialDesignDataGridTextColumnPopupEditingStyle}"
+                                            Header="Price"
+                                            IsReadOnly="True" />
+                                    </DataGrid.Columns>
+                                </DataGrid>
+                            </StackPanel>
+                        </materialDesign:Card>
+                        <TextBlock Text="{Binding CurrentInvoice.Total}" />
+                    </StackPanel>
+                    <materialDesign:PopupBox>
+                        <StackPanel>
+                            <Button ToolTip="Create new invoice">
+                                <materialDesign:PackIcon Kind="Plus" />
+                            </Button>
+                            
+                            <Button Name="ButtonEditInvoice" ToolTip="Edit current invoice">
+                                <ToggleButton 
+                                Name="EditInvoice"                                
+                                Click="EditInvoice_Click"
+                                Style="{StaticResource EditSaveToggle}">
+                                    <ToggleButton.Content>
+                                        <materialDesign:PackIcon Kind="Pencil"/>
+                                    </ToggleButton.Content>
+                                    <materialDesign:ToggleButtonAssist.OnContent>
+                                        <materialDesign:PackIcon Kind="ContentSave"/>
+                                    </materialDesign:ToggleButtonAssist.OnContent>
+                                </ToggleButton>
+                            </Button>                            
+
+                            <Button ToolTip="Delete invoice">
+                                <materialDesign:PackIcon Kind="Delete" />
+                            </Button>
+                        </StackPanel>
+                    </materialDesign:PopupBox>                    
+                </Grid>
+            </DockPanel>
+        </materialDesign:DrawerHost>
+    </materialDesign:DialogHost>
 </Window>
