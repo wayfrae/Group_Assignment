@@ -28,5 +28,10 @@ namespace Group_Assignment.Search
         {
             InitializeComponent();
         }
+
+        private void Button_Click(object sender, RoutedEventArgs e)
+        {
+            Close();
+        }
     }
 }
