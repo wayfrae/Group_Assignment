@@ -75,6 +75,7 @@ namespace Group_Assignment
                 windowItems.Left = this.Left;
                 windowItems.Top = this.Top;
                 this.Hide();
+                MenuToggleButton.IsChecked = false; //close drawer
                 windowItems.ShowDialog();
                 //TODO: Check the flag for an update and update the items dropdown if there was a change
                 //check if there was a change to the items, if there was a change update the items dropdown
@@ -104,6 +105,7 @@ namespace Group_Assignment
                 windowSearch.Left = this.Left;
                 windowSearch.Top = this.Top;
                 this.Hide();
+                MenuToggleButton.IsChecked = false; //close drawer
                 windowSearch.ShowDialog();
                 //TODO: Get the selected invoice and display it
                 //get the invoice selected by the search
