@@ -13,7 +13,8 @@
         </Grid.ColumnDefinitions>
         <DataGrid HorizontalAlignment="Left" Height="467" Margin="52,58,0,0" VerticalAlignment="Top" Width="592"/>
         <Button Content="Add Item" HorizontalAlignment="Left" Margin="693,58,0,0" VerticalAlignment="Top" Width="75"/>
-        <Button Content="Save Changes" HorizontalAlignment="Left" Margin="693,121,0,0" VerticalAlignment="Top" Width="75"/>
+        <Button Content="Save Changes" HorizontalAlignment="Left" Margin="693,122,0,0" VerticalAlignment="Top" Width="75"/>
+        <Button Content="Close Window" HorizontalAlignment="Left" Margin="693,177,0,0" VerticalAlignment="Top" Width="75"/>
 
     </Grid>
 </Window>
