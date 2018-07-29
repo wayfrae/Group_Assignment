@@ -38,7 +38,7 @@
                         Grid.Column="0"/>
                     <Button 
                         Content="Cancel"
-                        Grid.Column="1"/>
+                        Grid.Column="1" Click="Button_Click"/>
                 </Grid>
             </StackPanel>
         </Grid>
