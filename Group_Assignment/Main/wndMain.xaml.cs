@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
 using System.Reflection;
@@ -133,11 +134,25 @@ namespace Group_Assignment
                 {
                     DataGridOrderSummary.CanUserAddRows = true;
                     ButtonEditInvoice.ToolTip = "Save Invoice";
+                    ButtonNewInvoice.IsEnabled = false;
                 }
                 else
                 {
+                    //save is clicked
+                    if (mainLogic.CurrentInvoice.Number.Equals("TBD"))
+                    {
+                        mainLogic.SaveToDatabase();
+                    }
+                    else
+                    {
+                        mainLogic.UpdateDatabase();
+                    }
                     DataGridOrderSummary.CanUserAddRows = false;
                     ButtonEditInvoice.ToolTip = "Edit Invoice";
+                    ButtonNewInvoice.IsEnabled = true;
+                    DataGridOrderSummary.SelectedIndex = -1;
+
+
                 }
             }
             catch (Exception ex)
@@ -145,6 +160,59 @@ namespace Group_Assignment
                 HandleException(MethodInfo.GetCurrentMethod().DeclaringType.Name, MethodInfo.GetCurrentMethod().Name, ex.Message);
             }
         }
+
+        /// <summary>
+        /// Creates a new invoice when clicked
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void NewInvoice_Click(object sender, RoutedEventArgs e)
+        {
+            Button btn = (Button)sender;
+            btn.IsEnabled = false;
+            mainLogic.CurrentInvoice = new Invoice
+            {
+                Number = "TBD",
+                LineItems = new ObservableCollection<LineItem>(),
+                Date = DateTime.Now,
+                Total = "Total Due: $0.00"
+            };
+
+            EditInvoice.IsChecked = true;
+            DataGridOrderSummary.CanUserAddRows = true;
+            ButtonEditInvoice.ToolTip = "Save Invoice";
+            
+            
+            
+        }
+
+        /// <summary>
+        /// Updates the total when the cell is done being edited
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void DataGridOrderSummary_CellEditEnding(object sender, DataGridCellEditEndingEventArgs e)
+        {
+
+            mainLogic.CurrentInvoice.GetTotal();
+        }
+
+        /// <summary>
+        /// Adds a new line item with the proper position
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void DataGridOrderSummary_AddingNewItem(object sender, AddingNewItemEventArgs e)
+        {
+
+            e.NewItem = new LineItem
+            {
+                Position = DataGridOrderSummary.Items.Count,
+                ItemOnLine = new Item()
+            };
+
+        }
+
 
         /// <summary>
         /// Handles the exception by showing a message box with user friendly stack trace. Will write to Console.Error if message box fails.

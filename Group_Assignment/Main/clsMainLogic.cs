@@ -1,16 +1,19 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.Data;
 using System.Linq;
 using System.Reflection;
+using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
 
 namespace Group_Assignment.Main
 {
-    class clsMainLogic
+    class clsMainLogic : INotifyPropertyChanged
     {
+        private Invoice currentInvoice;
         /// <summary>
         /// Class to access database
         /// </summary>
@@ -22,6 +25,11 @@ namespace Group_Assignment.Main
         clsMainSQL sql;
 
         /// <summary>
+        /// Event for when a property changes
+        /// </summary>
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        /// <summary>
         /// List of all items
         /// </summary>
         public List<Item> Items { get; set; }
@@ -29,7 +37,18 @@ namespace Group_Assignment.Main
         /// <summary>
         /// The current invoice being displayed
         /// </summary>
-        public Invoice CurrentInvoice { get; set; }
+        public Invoice CurrentInvoice
+        {
+            get
+            {
+                return this.currentInvoice;
+            }
+            set
+            {
+                this.currentInvoice = value;
+                NotifyPropertyChanged();
+            }
+        }
 
         /// <summary>
         /// Constructor for the logic class. Sets the current invoice to the most recent invoice. 
@@ -38,8 +57,40 @@ namespace Group_Assignment.Main
         {
             db = new clsDataAccess();
             sql = new clsMainSQL();
+
+            //get invoice using a sql subquery
             this.CurrentInvoice = this.GetInvoice(sql.SelectMostRecentInvoice());
+
+            this.CurrentInvoice.GetTotal();
             this.Items = this.GetItems();
+        }        
+
+        /// <summary>
+        /// Update current invoice to database
+        /// </summary>
+        public void UpdateDatabase()
+        {
+            db.ExecuteNonQuery(sql.UpdateInvoices(CurrentInvoice.Number, CurrentInvoice.Date));
+            foreach(LineItem line in CurrentInvoice.LineItems)
+            {
+                db.ExecuteNonQuery(sql.UpdateLineItems(CurrentInvoice.Number, line.Position, line.ItemOnLine.Code));
+            }
+            CurrentInvoice = GetInvoice(sql.SelectMostRecentInvoice());
+        }
+
+        /// <summary>
+        /// Save current invoice to database
+        /// </summary>
+        public void SaveToDatabase()
+        {
+            db.ExecuteNonQuery(sql.InsertToInvoices(CurrentInvoice.Date));
+
+            CurrentInvoice.Number = db.ExecuteScalarSQL(sql.SelectMostRecentInvoice());
+            foreach (LineItem line in CurrentInvoice.LineItems)
+            {
+                Console.WriteLine(sql.InsertToLineItems(CurrentInvoice.Number, line.Position, line.ItemOnLine.Code));
+                db.ExecuteNonQuery(sql.InsertToLineItems(CurrentInvoice.Number, line.Position, line.ItemOnLine.Code));
+            }
         }
 
         /// <summary>
@@ -62,7 +113,24 @@ namespace Group_Assignment.Main
                 });
             }
             return list;
-        }        
+        }
+
+        /// <summary>
+        /// Sends notification that the property has changed.
+        /// </summary>
+        /// <param name="propertyName">The name of the property that has changed</param>
+        protected virtual void NotifyPropertyChanged([CallerMemberName] String propertyName = "")
+        {
+            try
+            {
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(MethodInfo.GetCurrentMethod().DeclaringType.Name + "."
+                    + MethodInfo.GetCurrentMethod().Name + " -> " + ex.Message);
+            }
+        }
 
         /// <summary>
         /// Returns the invoice with the given invoice number
@@ -78,8 +146,12 @@ namespace Group_Assignment.Main
                 ObservableCollection<LineItem> lines = new ObservableCollection<LineItem>();
                 int numRows = 0;
                 data = this.db.ExecuteSQLStatement(sql.SelectAllInvoiceData(invoiceNumber), ref numRows);
-                inv.Date = (DateTime)data.Tables[0].Rows[0][0];
-                inv.Number = data.Tables[0].Rows[0][5].ToString();
+                if(numRows > 0)
+                {
+                    inv.Date = (DateTime)data.Tables[0].Rows[0][0];
+                    inv.Number = data.Tables[0].Rows[0][5].ToString();
+                }
+                
                 for (int i = 0; i < numRows; i++)
                 {
                     lines.Add(new LineItem

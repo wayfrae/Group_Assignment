@@ -47,9 +47,9 @@ namespace Group_Assignment.Main
         /// <param name="invoiceNumber">invoice number to add</param>
         /// <param name="date">date to add</param>
         /// <returns>SQL insert string to add an entry to the Invoices table</returns>
-        public string InsertToInvoices(string invoiceNumber, DateTime date)
+        public string InsertToInvoices(DateTime date)
         {
-            return "INSERT INTO Invoices(InvoiceNum, Date) VALUES(" + invoiceNumber + ", " + date.Date.ToOADate() + ")";
+            return "INSERT INTO Invoices(InvoiceDate) VALUES(#" + date.Date.ToString("yyyy-MM-dd") + "#)";
         }
 
         /// <summary>
@@ -61,7 +61,7 @@ namespace Group_Assignment.Main
         /// <returns></returns>
         public string InsertToLineItems(string invoiceNumber, int position, string itemCode)
         {
-            return "INSERT INTO LineItems(InvoiceNum, LineItemNum, ItemCode) VALUES(" + invoiceNumber + ", " + position + ", " + itemCode + ")";
+            return "INSERT INTO LineItems(InvoiceNum, LineItemNum, ItemCode) VALUES(" + invoiceNumber + ", " + position + ", '" + itemCode + "')";
         }
 
          /// <summary>

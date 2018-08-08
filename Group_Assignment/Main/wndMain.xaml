@@ -53,26 +53,35 @@
                         <TextBlock 
                             Style="{StaticResource MaterialDesignDisplay2TextBlock}" 
                             Text="{Binding CurrentInvoice.Number, UpdateSourceTrigger=PropertyChanged}" />
-                        <DatePicker Text="{Binding CurrentInvoice.Date}" />
+                        <DatePicker Text="{Binding CurrentInvoice.Date, UpdateSourceTrigger=PropertyChanged}" />
                         <materialDesign:Card>
                             <StackPanel>
                                 <TextBlock>Order Summary</TextBlock>
                                 <DataGrid
+                                    CellEditEnding="DataGridOrderSummary_CellEditEnding"
                                     Style="{StaticResource InvoiceDataGrid}"
                                     x:Name="DataGridOrderSummary"                                    
-                                    ItemsSource="{Binding CurrentInvoice.LineItems}">
+                                    ItemsSource="{Binding CurrentInvoice.LineItems, UpdateSourceTrigger=PropertyChanged}"
+                                    AddingNewItem="DataGridOrderSummary_AddingNewItem">
                                     
                                     <DataGrid.Columns>
+                                        <materialDesign:MaterialDataGridTextColumn
+                                            x:Name="CellPosition"
+                                            Binding="{Binding Position, UpdateSourceTrigger=PropertyChanged}"
+                                            EditingElementStyle="{StaticResource MaterialDesignDataGridTextColumnPopupEditingStyle}"
+                                            Header="#"
+                                            IsReadOnly="True"                                             
+                                            />
                                         <materialDesign:MaterialDataGridComboBoxColumn
                                             x:Name="ComboBoxItems"
                                             MinWidth="500"
                                             Header="Description"
                                             
                                             SelectedValueBinding="{Binding ItemOnLine, UpdateSourceTrigger=PropertyChanged}" 
-                                            TextBinding="{Binding ItemOnLine.Description}" />
+                                            TextBinding="{Binding ItemOnLine.Description, UpdateSourceTrigger=PropertyChanged}" />
 
                                         <materialDesign:MaterialDataGridTextColumn
-                                            Binding="{Binding ItemOnLine.PriceString}"
+                                            Binding="{Binding ItemOnLine.PriceString, UpdateSourceTrigger=PropertyChanged}"
                                             EditingElementStyle="{StaticResource MaterialDesignDataGridTextColumnPopupEditingStyle}"
                                             Header="Price"
                                             IsReadOnly="True" />
@@ -80,11 +89,14 @@
                                 </DataGrid>
                             </StackPanel>
                         </materialDesign:Card>
-                        <TextBlock Text="{Binding CurrentInvoice.Total}" />
+                        <TextBlock Text="{Binding CurrentInvoice.Total, UpdateSourceTrigger=PropertyChanged}" />
                     </StackPanel>
                     <materialDesign:PopupBox>
                         <StackPanel>
-                            <Button ToolTip="Create new invoice">
+                            <Button 
+                                x:Name="ButtonNewInvoice"
+                                ToolTip="Create new invoice"
+                                Click="NewInvoice_Click">
                                 <materialDesign:PackIcon Kind="Plus" />
                             </Button>
                             
