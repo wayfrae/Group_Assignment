@@ -58,7 +58,8 @@ namespace Group_Assignment
             }
             set
             {
-                this.lineItems = value;      
+                this.lineItems = value;
+                NotifyPropertyChanged();
             }
         }
 

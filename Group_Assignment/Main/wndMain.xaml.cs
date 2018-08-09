@@ -55,7 +55,7 @@ namespace Group_Assignment
                 windowItems = new wndItems();
                 windowSearch = new wndSearch();
                 mainLogic = new clsMainLogic();
-                StackPanelMain.DataContext = mainLogic;
+                GridMain.DataContext = mainLogic;
                 ComboBoxItems.ItemsSource = mainLogic.Items;
             }
             catch (Exception ex)
@@ -132,7 +132,7 @@ namespace Group_Assignment
             {
                 if (EditInvoice.IsChecked == true)
                 {
-                    DataGridOrderSummary.CanUserAddRows = true;
+                    DataGridOrderSummary.IsEnabled = true;
                     ButtonEditInvoice.ToolTip = "Save Invoice";
                     ButtonNewInvoice.IsEnabled = false;
                 }
@@ -147,7 +147,7 @@ namespace Group_Assignment
                     {
                         mainLogic.UpdateDatabase();
                     }
-                    DataGridOrderSummary.CanUserAddRows = false;
+                    DataGridOrderSummary.IsEnabled = false;
                     ButtonEditInvoice.ToolTip = "Edit Invoice";
                     ButtonNewInvoice.IsEnabled = true;
                     DataGridOrderSummary.SelectedIndex = -1;
@@ -179,7 +179,7 @@ namespace Group_Assignment
             };
 
             EditInvoice.IsChecked = true;
-            DataGridOrderSummary.CanUserAddRows = true;
+            DataGridOrderSummary.IsEnabled = true;
             ButtonEditInvoice.ToolTip = "Save Invoice";
             
             

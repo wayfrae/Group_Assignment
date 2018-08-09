@@ -83,17 +83,16 @@
             <Style TargetType="DataGrid" x:Key="SearchDataGrid" BasedOn="{StaticResource MaterialDesignDataGrid}">
                 <Setter Property="Margin" Value="10" />
             </Style>
+            
             <Style x:Key="InvoiceDataGrid" BasedOn="{StaticResource MaterialDesignDataGrid}" TargetType="DataGrid">
                 <Setter Property="Margin" Value="10" />
                 <Setter Property="materialDesign:DataGridAssist.CellPadding" Value="13 8 8 8" />
                 <Setter Property="materialDesign:DataGridAssist.ColumnHeaderPadding" Value="8" />
                 <Setter Property="AutoGenerateColumns" Value="False" />
-                <Setter Property="CanUserAddRows" Value="False" />
-                <Setter Property="CanUserSortColumns" Value="True" />
+                <Setter Property="Background" Value="White" />
                 <Setter Property="FontSize" Value="16" />
                 <Style.Resources>
-                    <Style BasedOn="{StaticResource MaterialDesignSubheadingTextBlock}" TargetType="TextBlock" />
-                    
+                    <Style BasedOn="{StaticResource MaterialDesignSubheadingTextBlock}" TargetType="TextBlock" />                    
                 </Style.Resources>
             </Style>
             
@@ -103,15 +102,7 @@
                         <Setter Property="Grid.ColumnSpan" Value="2" />
                         <Setter Property="Margin" Value="10" />
                         <Setter Property="HorizontalAlignment" Value="Stretch" />
-                        <Style.Resources>
-                            <Style BasedOn="{StaticResource MaterialDesignFloatingHintDatePicker}" TargetType="DatePicker">
-                                <Setter Property="Width" Value="200" />
-                                <Setter Property="Margin" Value="0,15,0,15" />
-                                <Setter Property="HorizontalAlignment" Value="Left" />
-                                <Setter Property="materialDesign:HintAssist.Hint" Value="Date" />
-                                <Setter Property="FontSize" Value="25" />
-                                <Setter Property="IsEnabled" Value="{Binding IsChecked, ElementName=EditInvoice}" />
-                            </Style>
+                        <Style.Resources>                            
                             <Style TargetType="materialDesign:Card">
                                 <Setter Property="IsEnabled" Value="{Binding IsChecked, ElementName=EditInvoice}" />
                                 <Setter Property="MinHeight" Value="425" />
@@ -127,13 +118,7 @@
                                     </Style>
                                 </Style.Resources>
                             </Style>
-                            <Style BasedOn="{StaticResource MaterialDesignDisplay2TextBlock}" TargetType="TextBlock">
-                                <Setter Property="Grid.Row" Value="5" />
-                                <Setter Property="Grid.ColumnSpan" Value="5" />
-                                <Setter Property="Margin" Value="0,20,0,20" />
-                                <Setter Property="HorizontalAlignment" Value="Right" />
-                                <Setter Property="Foreground" Value="{StaticResource PrimaryHueDarkBrush}" />
-                            </Style>
+                            
                         </Style.Resources>
                     </Style>
                     <Style BasedOn="{StaticResource MaterialDesignMultiFloatingActionAccentPopupBox}" TargetType="materialDesign:PopupBox">
@@ -147,7 +132,27 @@
                     </Style>
                 </Style.Resources>
             </Style>
+            
+           
 
+            <Style x:Key="DatePicker" BasedOn="{StaticResource MaterialDesignFloatingHintDatePicker}" TargetType="DatePicker">
+                <Setter Property="Width" Value="200" />
+                <Setter Property="HorizontalAlignment" Value="Left" />
+                <Setter Property="materialDesign:HintAssist.Hint" Value="Date" />
+                <Setter Property="FontSize" Value="25" />
+                <Setter Property="IsEnabled" Value="{Binding IsChecked, ElementName=EditInvoice}" />
+                <Setter Property="Grid.Row" Value="1" />
+                <Setter Property="Margin" Value="10" />
+            </Style>
+
+            <Style x:Key="TotalDisplay" BasedOn="{StaticResource MaterialDesignDisplay2TextBlock}" TargetType="TextBlock">
+                <Setter Property="Grid.Row" Value="3" />
+                <Setter Property="Grid.ColumnSpan" Value="2" />
+                <Setter Property="Margin" Value="0,20,10,10" />
+                <Setter Property="HorizontalAlignment" Value="Right" />
+                <Setter Property="Foreground" Value="{StaticResource PrimaryHueDarkBrush}" />
+            </Style>
+            
             <Style TargetType="ToggleButton" x:Key="EditSaveToggle" BasedOn="{StaticResource MaterialDesignActionLightToggleButton}">
                 <Setter Property="ToolTipService.Placement" Value="Right" />
                 <Setter Property="Width" Value="35" />
@@ -173,75 +178,7 @@
                         </showMeTheXaml:XamlFormatter>
                     </Setter.Value>
                 </Setter>
-                <Setter Property="Template">
-                    <Setter.Value>
-                        <ControlTemplate TargetType="showMeTheXaml:XamlDisplay">
-                            <DockPanel>
-                                <materialDesign:PopupBox
-                                    x:Name="PopupBox"
-                                    Padding="10"
-                                    HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
-                                    VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
-                                    StaysOpen="True">
-                                    <materialDesign:PopupBox.ToggleContent>
-                                        <materialDesign:PackIcon
-                                            Margin="3"
-                                            Background="Transparent"
-                                            Cursor="Hand"
-                                            Foreground="{DynamicResource PrimaryHueDarkBrush}"
-                                            Kind="Xaml"
-                                            ToolTip="View XAML">
-                                            <materialDesign:PackIcon.Style>
-                                                <Style BasedOn="{StaticResource {x:Type materialDesign:PackIcon}}" TargetType="materialDesign:PackIcon">
-                                                    <Setter Property="Opacity" Value="0.2" />
-                                                    <Style.Triggers>
-                                                        <Trigger Property="IsMouseOver" Value="True">
-                                                            <Setter Property="Opacity" Value="1" />
-                                                        </Trigger>
-                                                    </Style.Triggers>
-                                                </Style>
-                                            </materialDesign:PackIcon.Style>
-                                        </materialDesign:PackIcon>
-                                    </materialDesign:PopupBox.ToggleContent>
-                                    <Border MaxWidth="800" MaxHeight="600">
-                                        <StackPanel>
-                                            <avalonEdit:TextEditor Document="{Binding Xaml, RelativeSource={RelativeSource TemplatedParent}, Converter={StaticResource TextDocumentValueConverter}}" Style="{StaticResource AvalonTextEditorXamlDisplay}" />
-                                            <Button
-                                                Margin="0,10,0,0"
-                                                HorizontalAlignment="Right"
-                                                Command="Copy"
-                                                CommandParameter="{Binding Xaml, RelativeSource={RelativeSource TemplatedParent}}"
-                                                Content="_COPY"
-                                                Style="{StaticResource MaterialDesignRaisedButton}"
-                                                Tag="{Binding Xaml, RelativeSource={RelativeSource TemplatedParent}}" />
-                                        </StackPanel>
-                                    </Border>
-
-                                </materialDesign:PopupBox>
-                                <Grid>
-                                    <AdornerDecorator>
-                                        <Border
-                                            Margin="-5"
-                                            BorderBrush="{DynamicResource SecondaryAccentBrush}"
-                                            Opacity=".4">
-                                            <Border.Style>
-                                                <Style TargetType="Border">
-                                                    <Setter Property="BorderThickness" Value="0" />
-                                                    <Style.Triggers>
-                                                        <DataTrigger Binding="{Binding ElementName=PopupBox, Path=IsPopupOpen}" Value="True">
-                                                            <Setter Property="BorderThickness" Value="5" />
-                                                        </DataTrigger>
-                                                    </Style.Triggers>
-                                                </Style>
-                                            </Border.Style>
-                                        </Border>
-                                    </AdornerDecorator>
-                                    <ContentPresenter />
-                                </Grid>
-                            </DockPanel>
-                        </ControlTemplate>
-                    </Setter.Value>
-                </Setter>
+                
             </Style>
         </ResourceDictionary>
     </Application.Resources>

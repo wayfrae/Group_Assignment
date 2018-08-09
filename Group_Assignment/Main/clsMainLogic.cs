@@ -70,33 +70,44 @@ namespace Group_Assignment.Main
         /// </summary>
         public void UpdateDatabase()
         {
-            int numRows = int.Parse(db.ExecuteScalarSQL(sql.CountItems(CurrentInvoice.Number)));
-            //if there are the same number of line items as there were previously update them
-            if(numRows == CurrentInvoice.LineItems.Count)
+            RemoveBlankLines();
+            int numRows = int.Parse(db.ExecuteScalarSQL(sql.CountItems(CurrentInvoice.Number)));                  
+
+            if (numRows < CurrentInvoice.LineItems.Count) //if there are more line items than rows in databse, insert the  new lines
             {
-                db.ExecuteNonQuery(sql.UpdateInvoices(CurrentInvoice.Number, CurrentInvoice.Date));
-                foreach (LineItem line in CurrentInvoice.LineItems)
+                for (int i = numRows; i < CurrentInvoice.LineItems.Count; i++)
                 {
-                    Console.WriteLine(sql.UpdateLineItems(CurrentInvoice.Number, line.Position, line.ItemOnLine.Code));
-                    db.ExecuteNonQuery(sql.UpdateLineItems(CurrentInvoice.Number, line.Position, line.ItemOnLine.Code));
-                }
-                CurrentInvoice = GetInvoice(sql.SelectMostRecentInvoice());
-            }else if(numRows < CurrentInvoice.LineItems.Count) //if there are more line items, insert the  new lines
-            {
-                for (int i = numRows; i <= CurrentInvoice.LineItems.Count; i++)
-                {
-                    db.ExecuteNonQuery(sql.InsertToLineItems(CurrentInvoice.Number, CurrentInvoice.LineItems[i-1].Position, CurrentInvoice.LineItems[i-1].ItemOnLine.Code));
+                    db.ExecuteNonQuery(sql.InsertToLineItems(CurrentInvoice.Number, CurrentInvoice.LineItems[i].Position, CurrentInvoice.LineItems[i].ItemOnLine.Code));
                 }
                 
             }else if(CurrentInvoice.LineItems.Count < numRows)  //if there are fewer line items, delete the remainder
             {
-                int remainder = numRows - CurrentInvoice.LineItems.Count;
-                for (int i = remainder + 1; i <= numRows; i++)
+                for (int i = CurrentInvoice.LineItems.Count + 1; i <= numRows; i++)
                 {
                     db.ExecuteNonQuery(sql.DeleteItem(CurrentInvoice.Number, i));
                 }
             }
-            
+
+            //update the other lines in case order changed
+            db.ExecuteNonQuery(sql.UpdateInvoices(CurrentInvoice.Number, CurrentInvoice.Date));
+            foreach (LineItem line in CurrentInvoice.LineItems)
+            {
+                Console.WriteLine(sql.UpdateLineItems(CurrentInvoice.Number, line.Position, line.ItemOnLine.Code));
+                db.ExecuteNonQuery(sql.UpdateLineItems(CurrentInvoice.Number, line.Position, line.ItemOnLine.Code));
+            }
+            CurrentInvoice = GetInvoice(sql.SelectMostRecentInvoice());
+
+        }
+
+        private void RemoveBlankLines()
+        {
+            List<LineItem> itemsToRemove = CurrentInvoice.LineItems.Where(x => x.ItemOnLine.Code == null).ToList();
+            foreach(LineItem line in itemsToRemove)
+            {                
+                CurrentInvoice.LineItems.Remove(line);               
+                
+            }
+            RecalculateLinePositions();
         }
 
         /// <summary>
@@ -104,6 +115,7 @@ namespace Group_Assignment.Main
         /// </summary>
         public void SaveToDatabase()
         {
+            RemoveBlankLines();
             db.ExecuteNonQuery(sql.InsertToInvoices(CurrentInvoice.Date));
 
             CurrentInvoice.Number = db.ExecuteScalarSQL(sql.SelectMostRecentInvoice());

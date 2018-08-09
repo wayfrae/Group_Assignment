@@ -41,27 +41,41 @@
                         </TextBlock>
                     </DockPanel>
                 </materialDesign:ColorZone>
-                <Grid>
+                <Grid x:Name="GridMain">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition />
                         <ColumnDefinition />
                     </Grid.ColumnDefinitions>
-                    <StackPanel x:Name="StackPanelMain">
-                        <TextBlock Style="{StaticResource MaterialDesignTitleTextBlock}">
-                                   Invoice Number
-                        </TextBlock>
-                        <TextBlock 
-                            Style="{StaticResource MaterialDesignDisplay2TextBlock}" 
-                            Text="{Binding CurrentInvoice.Number, UpdateSourceTrigger=PropertyChanged}" />
-                        <DatePicker Text="{Binding CurrentInvoice.Date, UpdateSourceTrigger=PropertyChanged}" />
-                        <materialDesign:Card>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="80"/>
+                        <RowDefinition Height="76"/>
+                        <RowDefinition/>
+                        <RowDefinition Height="80"/>
+                    </Grid.RowDefinitions>
+                    <TextBlock Style="{StaticResource MaterialDesignTitleTextBlock}"
+                               Margin="10">
+                               Invoice Number
+                    </TextBlock>
+                    <TextBlock 
+                        Grid.Row="0"
+                        Margin="5,30,396.333,0"
+                        Style="{StaticResource MaterialDesignDisplay2TextBlock}" 
+                        Text="{Binding CurrentInvoice.Number, UpdateSourceTrigger=PropertyChanged}" Grid.ColumnSpan="2" />
+                    <DatePicker Style="{StaticResource DatePicker}" 
+                                Text="{Binding CurrentInvoice.Date, UpdateSourceTrigger=PropertyChanged}" Margin="10,10,0,10" 
+                                />
+                    <materialDesign:Card 
+                        Grid.ColumnSpan="2"
+                        Grid.Row="2"
+                        VerticalAlignment="Stretch" Margin="10,10,10.333,10.333">
+                        <ScrollViewer VerticalScrollBarVisibility="Auto" Height="{Binding Parent.ActualHeight, Mode=OneWay, RelativeSource={RelativeSource Self}}">
                             <StackPanel>
                                 <TextBlock>Order Summary</TextBlock>
                                 <DataGrid
-                                    CanUserAddRows="True"
-                                    CanUserDeleteRows="True"
+                                    IsEnabled="False"
                                     PreviewKeyUp="DataGridOrderSummary_PreviewKeyUp"
                                     CellEditEnding="DataGridOrderSummary_CellEditEnding"
+                                    IsSynchronizedWithCurrentItem="False"                                    
                                     Style="{StaticResource InvoiceDataGrid}"
                                     x:Name="DataGridOrderSummary"                                    
                                     ItemsSource="{Binding CurrentInvoice.LineItems, UpdateSourceTrigger=PropertyChanged}"
@@ -76,62 +90,67 @@
                                             </MenuItem>
                                         </ContextMenu>
                                     </DataGrid.ContextMenu>
-                                        <DataGrid.Columns>
-                                            <materialDesign:MaterialDataGridTextColumn
-                                                x:Name="CellPosition"
-                                                Binding="{Binding Position, UpdateSourceTrigger=PropertyChanged}"
-                                                EditingElementStyle="{StaticResource MaterialDesignDataGridTextColumnPopupEditingStyle}"
-                                                Header="#"
-                                                IsReadOnly="True"                                             
-                                                />
-                                            <materialDesign:MaterialDataGridComboBoxColumn
-                                                x:Name="ComboBoxItems"
-                                                MinWidth="500"
-                                                Header="Description"                                            
-                                                SelectedValueBinding="{Binding ItemOnLine, UpdateSourceTrigger=PropertyChanged}" 
-                                                TextBinding="{Binding ItemOnLine.Description, UpdateSourceTrigger=PropertyChanged}" />
+                                    <DataGrid.Columns>
+                                        <materialDesign:MaterialDataGridTextColumn
+                                            x:Name="CellPosition"
+                                            Binding="{Binding Position, UpdateSourceTrigger=PropertyChanged}"
+                                            EditingElementStyle="{StaticResource MaterialDesignDataGridTextColumnPopupEditingStyle}"
+                                            Header="#"
+                                            IsReadOnly="True"                                             
+                                            />
+                                        <materialDesign:MaterialDataGridComboBoxColumn
+                                            x:Name="ComboBoxItems"
+                                            MinWidth="500"
+                                            Header="Description"                                            
+                                            SelectedValueBinding="{Binding ItemOnLine, UpdateSourceTrigger=PropertyChanged}" 
+                                            TextBinding="{Binding ItemOnLine.Description, UpdateSourceTrigger=PropertyChanged}" />
 
-                                            <materialDesign:MaterialDataGridTextColumn
-                                                Binding="{Binding ItemOnLine.PriceString, UpdateSourceTrigger=PropertyChanged}"
-                                                EditingElementStyle="{StaticResource MaterialDesignDataGridTextColumnPopupEditingStyle}"
-                                                Header="Price"
-                                                IsReadOnly="True" />
-                                        </DataGrid.Columns>
-                                    </DataGrid>
-                                </StackPanel>
-                            </materialDesign:Card>
-                            <TextBlock Text="{Binding CurrentInvoice.Total, UpdateSourceTrigger=PropertyChanged}" />
-                        </StackPanel>
-                        <materialDesign:PopupBox>
-                            <StackPanel>
-                                <Button 
-                                    x:Name="ButtonNewInvoice"
-                                    ToolTip="Create new invoice"
-                                    Click="NewInvoice_Click">
-                                    <materialDesign:PackIcon Kind="Plus" />
-                                </Button>
-                            
-                                <Button Name="ButtonEditInvoice" ToolTip="Edit current invoice">
-                                    <ToggleButton 
-                                        Name="EditInvoice"                                
-                                        Click="EditInvoice_Click"
-                                        Style="{StaticResource EditSaveToggle}">
-                                        <ToggleButton.Content>
-                                            <materialDesign:PackIcon Kind="Pencil"/>
-                                        </ToggleButton.Content>
-                                        <materialDesign:ToggleButtonAssist.OnContent>
-                                            <materialDesign:PackIcon Kind="ContentSave"/>
-                                        </materialDesign:ToggleButtonAssist.OnContent>
-                                    </ToggleButton>
-                                </Button>                            
-
-                                <Button ToolTip="Delete invoice">
-                                    <materialDesign:PackIcon Kind="Delete" />
-                                </Button>
+                                        <materialDesign:MaterialDataGridTextColumn
+                                            Binding="{Binding ItemOnLine.PriceString, UpdateSourceTrigger=PropertyChanged}"
+                                            EditingElementStyle="{StaticResource MaterialDesignDataGridTextColumnPopupEditingStyle}"
+                                            Header="Price"
+                                            IsReadOnly="True" />
+                                    </DataGrid.Columns>
+                                </DataGrid>
                             </StackPanel>
-                        </materialDesign:PopupBox>                    
-                    </Grid>
-                </DockPanel>
-            </materialDesign:DrawerHost>
-        </materialDesign:DialogHost>
-    </Window>
+                        </ScrollViewer>
+
+                    </materialDesign:Card>
+                    <materialDesign:PopupBox Margin="0,20,20.333,0">
+                        <StackPanel>
+                            <Button 
+                                x:Name="ButtonNewInvoice"
+                                ToolTip="Create new invoice"
+                                Click="NewInvoice_Click">
+                                <materialDesign:PackIcon Kind="Plus" />
+                            </Button>
+
+                            <Button Name="ButtonEditInvoice" ToolTip="Edit current invoice">
+                                <ToggleButton 
+                                    Name="EditInvoice"                                
+                                    Click="EditInvoice_Click"
+                                    Style="{StaticResource EditSaveToggle}">
+                                    <ToggleButton.Content>
+                                        <materialDesign:PackIcon Kind="Pencil"/>
+                                    </ToggleButton.Content>
+                                    <materialDesign:ToggleButtonAssist.OnContent>
+                                        <materialDesign:PackIcon Kind="ContentSave"/>
+                                    </materialDesign:ToggleButtonAssist.OnContent>
+                                </ToggleButton>
+                            </Button>
+
+                            <Button ToolTip="Delete invoice">
+                                <materialDesign:PackIcon Kind="Delete" />
+                            </Button>
+                        </StackPanel>
+                    </materialDesign:PopupBox>
+                    <TextBlock 
+                        Style="{StaticResource TotalDisplay}"
+                        Text="{Binding CurrentInvoice.Total, UpdateSourceTrigger=PropertyChanged}" />
+
+                </Grid>
+
+            </DockPanel>
+        </materialDesign:DrawerHost>
+    </materialDesign:DialogHost>
+</Window>
