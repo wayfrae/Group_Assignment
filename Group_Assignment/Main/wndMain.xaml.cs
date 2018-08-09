@@ -193,7 +193,6 @@ namespace Group_Assignment
         /// <param name="e"></param>
         private void DataGridOrderSummary_CellEditEnding(object sender, DataGridCellEditEndingEventArgs e)
         {
-
             mainLogic.CurrentInvoice.GetTotal();
         }
 
@@ -233,6 +232,23 @@ namespace Group_Assignment
             }
         }
 
-        
+        /// <summary>
+        /// When user deletes row with the DELETE key, recalculate line positions
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void DataGridOrderSummary_PreviewKeyUp(object sender, KeyEventArgs e)
+        {
+            if(e.Key == Key.Delete)
+            {
+                mainLogic.RecalculateLinePositions();
+                mainLogic.CurrentInvoice.GetTotal();
+            }
+        }
+
+        private void MenuItem_Click(object sender, RoutedEventArgs e)
+        {
+            mainLogic.DeleteLineItem(DataGridOrderSummary);
+        }
     }
 }

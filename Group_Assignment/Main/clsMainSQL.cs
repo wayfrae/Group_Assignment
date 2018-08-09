@@ -73,7 +73,7 @@ namespace Group_Assignment.Main
          /// <returns></returns>
         public string UpdateLineItems(string invoiceNumber, int position, string itemCode)
         {
-            return "UPDATE LineItems SET LineItemNum=" + position + ", ItemCode=" + itemCode + "WHERE InvoiceNum=" + invoiceNumber;
+            return "UPDATE LineItems SET ItemCode='" + itemCode + "' WHERE InvoiceNum=" + invoiceNumber + " AND LineItemNum = " + position;
         }
 
         /// <summary>
@@ -84,9 +84,22 @@ namespace Group_Assignment.Main
         /// <returns>SQL update string to add an entry to the Invoices table</returns>
         public string UpdateInvoices(string invoiceNumber, DateTime date)
         {
-            return "UPDATE Invoices SET Date=" + date.Date.ToOADate() + " WHERE InvoiceNum=" + invoiceNumber;
+            return "UPDATE Invoices SET InvoiceDate=#" + date.Date.ToString("yyyy-MM-dd") + "# WHERE InvoiceNum=" + invoiceNumber;
         }
 
+        /// <summary>
+        /// Counts the number of line items on the invoice
+        /// </summary>
+        /// <param name="invoiceNumber">The invoice to count from</param>
+        /// <returns></returns>
+        public string CountItems(string invoiceNumber)
+        {
+            return "SELECT COUNT(*) FROM LineItems WHERE InvoiceNum=" + invoiceNumber;
+        }
 
+        public string DeleteItem(string invoiceNumber, int position)
+        {
+            return "DELETE FROM LineItems WHERE InvoiceNum=" + invoiceNumber + " AND LineItemNum=" + position;
+        }
     }
 }
