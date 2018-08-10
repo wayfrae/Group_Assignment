@@ -135,6 +135,7 @@ namespace Group_Assignment
                     DataGridOrderSummary.IsEnabled = true;
                     ButtonEditInvoice.ToolTip = "Save Invoice";
                     ButtonNewInvoice.IsEnabled = false;
+                    
                 }
                 else
                 {
@@ -151,6 +152,7 @@ namespace Group_Assignment
                     ButtonEditInvoice.ToolTip = "Edit Invoice";
                     ButtonNewInvoice.IsEnabled = true;
                     DataGridOrderSummary.SelectedIndex = -1;
+                    
 
 
                 }
@@ -334,6 +336,23 @@ namespace Group_Assignment
                         Scroller.LineUp();
                     }
                 }
+            }
+            catch (Exception ex)
+            {
+                HandleException(MethodInfo.GetCurrentMethod().DeclaringType.Name, MethodInfo.GetCurrentMethod().Name, ex.Message);
+            }
+        }
+
+        /// <summary>
+        /// Close the 
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void SnackbarMessage_ActionClick(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                SnackbarMessage.IsActive = false;
             }
             catch (Exception ex)
             {

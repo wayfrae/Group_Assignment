@@ -34,10 +34,10 @@
                 <Setter Property="TextElement.FontWeight" Value="Regular" />
                 <Setter Property="TextElement.Foreground" Value="{DynamicResource MaterialDesignBody}" />
                 <Setter Property="TextOptions.TextFormattingMode" Value="Ideal" />
-                <Setter Property="TextOptions.TextRenderingMode" Value="Auto" />                
+                <Setter Property="TextOptions.TextRenderingMode" Value="Auto" />
             </Style>
 
-            <Style TargetType="materialDesign:ColorZone" x:Key="TopMenuBar">
+            <Style x:Key="TopMenuBar" TargetType="materialDesign:ColorZone">
                 <Setter Property="Padding" Value="16" />
                 <Setter Property="materialDesign:ShadowAssist.ShadowDepth" Value="Depth2" />
                 <Setter Property="DockPanel.Dock" Value="Top" />
@@ -45,46 +45,52 @@
                 <Style.Resources>
                     <Style TargetType="DockPanel">
                         <Style.Resources>
-                            <Style TargetType="TextBlock" BasedOn="{StaticResource MaterialDesignHeadlineTextBlock}">
+                            <Style BasedOn="{StaticResource MaterialDesignHeadlineTextBlock}" TargetType="TextBlock">
                                 <Setter Property="HorizontalAlignment" Value="Center" />
                                 <Setter Property="VerticalAlignment" Value="Center" />
-                            </Style>                                                    
+                            </Style>
                         </Style.Resources>
                     </Style>
                 </Style.Resources>
             </Style>
-            <Style TargetType="StackPanel" x:Key="SearchStackPanel" >
+            <Style x:Key="SearchStackPanel" TargetType="StackPanel">
                 <Style.Resources>
-                    <Style TargetType="ComboBox" BasedOn="{StaticResource MaterialDesignComboBox}" >
+                    <Style BasedOn="{StaticResource MaterialDesignComboBox}" TargetType="ComboBox">
                         <Setter Property="Margin" Value="10,20,10,20" />
                     </Style>
                     <Style TargetType="Grid">
-                        <Setter Property="Margin" Value="10,40,10,40"/>
+                        <Setter Property="Margin" Value="10,40,10,40" />
                         <Style.Resources>
-                            <Style TargetType="Button" BasedOn="{StaticResource MaterialDesignRaisedButton}">
+                            <Style BasedOn="{StaticResource MaterialDesignRaisedButton}" TargetType="Button">
                                 <Setter Property="Width" Value="100" />
                             </Style>
                         </Style.Resources>
                     </Style>
                 </Style.Resources>
             </Style>
-            
-            <Style TargetType="StackPanel" x:Key="ItemsStackPanel" >
+
+            <Style x:Key="ItemsStackPanel" TargetType="StackPanel">
                 <Setter Property="Margin" Value="0,40,0,0" />
                 <Setter Property="HorizontalAlignment" Value="Center" />
                 <Style.Resources>
-                    <Style TargetType="Button" BasedOn="{StaticResource MaterialDesignRaisedButton}">
+                    <Style BasedOn="{StaticResource MaterialDesignRaisedButton}" TargetType="Button">
                         <Setter Property="Width" Value="150" />
                         <Setter Property="Margin" Value="10" />
                     </Style>
                 </Style.Resources>
             </Style>
-                
-            <Style TargetType="DataGrid" x:Key="SearchDataGrid" BasedOn="{StaticResource MaterialDesignDataGrid}">
+
+            <Style
+                x:Key="SearchDataGrid"
+                BasedOn="{StaticResource MaterialDesignDataGrid}"
+                TargetType="DataGrid">
                 <Setter Property="Margin" Value="10" />
             </Style>
-            
-            <Style x:Key="InvoiceDataGrid" BasedOn="{StaticResource MaterialDesignDataGrid}" TargetType="DataGrid">
+
+            <Style
+                x:Key="InvoiceDataGrid"
+                BasedOn="{StaticResource MaterialDesignDataGrid}"
+                TargetType="DataGrid">
                 <Setter Property="Margin" Value="10" />
                 <Setter Property="materialDesign:DataGridAssist.CellPadding" Value="13 8 8 8" />
                 <Setter Property="materialDesign:DataGridAssist.ColumnHeaderPadding" Value="8" />
@@ -92,13 +98,13 @@
                 <Setter Property="Background" Value="White" />
                 <Setter Property="FontSize" Value="16" />
                 <Style.Resources>
-                    <Style BasedOn="{StaticResource MaterialDesignSubheadingTextBlock}" TargetType="TextBlock" />                    
+                    <Style BasedOn="{StaticResource MaterialDesignSubheadingTextBlock}" TargetType="TextBlock" />
                 </Style.Resources>
             </Style>
 
             <Style TargetType="Grid">
                 <Style.Resources>
-                    
+
 
                     <Style BasedOn="{StaticResource MaterialDesignMultiFloatingActionAccentPopupBox}" TargetType="materialDesign:PopupBox">
                         <Setter Property="Grid.Column" Value="1" />
@@ -112,12 +118,12 @@
                 </Style.Resources>
             </Style>
 
-            <Style x:Key="MainStackPanel" TargetType="StackPanel">
+            <Style x:Key="MainDockPanel" TargetType="DockPanel">
                 <Setter Property="Grid.ColumnSpan" Value="2" />
                 <Setter Property="Margin" Value="10" />
                 <Setter Property="HorizontalAlignment" Value="Stretch" />
                 <Style.Resources>
-                    <Style TargetType="TextBlock" BasedOn="{StaticResource MaterialDesignTitleTextBlock}" />
+                    <Style BasedOn="{StaticResource MaterialDesignTitleTextBlock}" TargetType="TextBlock" />
                     <Style TargetType="materialDesign:Card">
                         <Setter Property="IsEnabled" Value="{Binding IsChecked, ElementName=EditInvoice}" />
                         <Setter Property="MinHeight" Value="425" />
@@ -137,7 +143,10 @@
                 </Style.Resources>
             </Style>
 
-            <Style x:Key="DatePicker" BasedOn="{StaticResource MaterialDesignFloatingHintDatePicker}" TargetType="DatePicker">
+            <Style
+                x:Key="DatePicker"
+                BasedOn="{StaticResource MaterialDesignFloatingHintDatePicker}"
+                TargetType="DatePicker">
                 <Setter Property="Width" Value="200" />
                 <Setter Property="HorizontalAlignment" Value="Left" />
                 <Setter Property="materialDesign:HintAssist.Hint" Value="Date" />
@@ -147,15 +156,21 @@
                 <Setter Property="Margin" Value="10" />
             </Style>
 
-            <Style x:Key="TotalDisplay" BasedOn="{StaticResource MaterialDesignDisplay2TextBlock}" TargetType="TextBlock">
+            <Style
+                x:Key="TotalDisplay"
+                BasedOn="{StaticResource MaterialDesignDisplay2TextBlock}"
+                TargetType="TextBlock">
                 <Setter Property="Grid.Row" Value="3" />
                 <Setter Property="Grid.ColumnSpan" Value="2" />
                 <Setter Property="Margin" Value="0,20,10,10" />
                 <Setter Property="HorizontalAlignment" Value="Right" />
                 <Setter Property="Foreground" Value="{StaticResource PrimaryHueDarkBrush}" />
             </Style>
-            
-            <Style TargetType="ToggleButton" x:Key="EditSaveToggle" BasedOn="{StaticResource MaterialDesignActionLightToggleButton}">
+
+            <Style
+                x:Key="EditSaveToggle"
+                BasedOn="{StaticResource MaterialDesignActionLightToggleButton}"
+                TargetType="ToggleButton">
                 <Setter Property="ToolTipService.Placement" Value="Right" />
                 <Setter Property="Width" Value="35" />
             </Style>
@@ -180,7 +195,7 @@
                         </showMeTheXaml:XamlFormatter>
                     </Setter.Value>
                 </Setter>
-                
+
             </Style>
         </ResourceDictionary>
     </Application.Resources>
