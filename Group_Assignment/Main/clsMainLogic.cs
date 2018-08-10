@@ -55,14 +55,22 @@ namespace Group_Assignment.Main
         /// </summary>
         public clsMainLogic()
         {
-            db = new clsDataAccess();
-            sql = new clsMainSQL();
+            try
+            {
+                db = new clsDataAccess();
+                sql = new clsMainSQL();
 
-            //get invoice using a sql subquery
-            this.CurrentInvoice = this.GetInvoice(sql.SelectMostRecentInvoice());
+                //get invoice using a sql subquery
+                this.CurrentInvoice = this.GetInvoice(sql.SelectMostRecentInvoice());
 
-            this.CurrentInvoice.GetTotal();
-            this.Items = this.GetItems();
+                this.CurrentInvoice.GetTotal();
+                this.Items = this.GetItems();
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(MethodInfo.GetCurrentMethod().DeclaringType.Name + "."
+                    + MethodInfo.GetCurrentMethod().Name + " -> " + ex.Message);
+            }
         }        
 
         /// <summary>
@@ -70,44 +78,64 @@ namespace Group_Assignment.Main
         /// </summary>
         public void UpdateDatabase()
         {
-            RemoveBlankLines();
-            int numRows = int.Parse(db.ExecuteScalarSQL(sql.CountItems(CurrentInvoice.Number)));                  
-
-            if (numRows < CurrentInvoice.LineItems.Count) //if there are more line items than rows in databse, insert the  new lines
+            try
             {
-                for (int i = numRows; i < CurrentInvoice.LineItems.Count; i++)
+                RemoveBlankLines();
+                int numRows = int.Parse(db.ExecuteScalarSQL(sql.CountItems(CurrentInvoice.Number)));
+
+                if (numRows < CurrentInvoice.LineItems.Count) //if there are more line items than rows in databse, insert the  new lines
                 {
-                    db.ExecuteNonQuery(sql.InsertToLineItems(CurrentInvoice.Number, CurrentInvoice.LineItems[i].Position, CurrentInvoice.LineItems[i].ItemOnLine.Code));
+                    for (int i = numRows; i < CurrentInvoice.LineItems.Count; i++)
+                    {
+                        db.ExecuteNonQuery(sql.InsertToLineItems(CurrentInvoice.Number, CurrentInvoice.LineItems[i].Position, CurrentInvoice.LineItems[i].ItemOnLine.Code));
+                    }
+
                 }
+                else if (CurrentInvoice.LineItems.Count < numRows)  //if there are fewer line items, delete the remainder
+                {
+                    for (int i = CurrentInvoice.LineItems.Count + 1; i <= numRows; i++)
+                    {
+                        db.ExecuteNonQuery(sql.DeleteLineItem(CurrentInvoice.Number, i));
+                    }
+                }
+
+                //update the other lines in case order changed
+                db.ExecuteNonQuery(sql.UpdateInvoices(CurrentInvoice.Number, CurrentInvoice.Date));
+                foreach (LineItem line in CurrentInvoice.LineItems)
+                {
+                    db.ExecuteNonQuery(sql.UpdateLineItems(CurrentInvoice.Number, line.Position, line.ItemOnLine.Code));
+                }
+                CurrentInvoice = GetInvoice(sql.SelectMostRecentInvoice());
                 
-            }else if(CurrentInvoice.LineItems.Count < numRows)  //if there are fewer line items, delete the remainder
-            {
-                for (int i = CurrentInvoice.LineItems.Count + 1; i <= numRows; i++)
-                {
-                    db.ExecuteNonQuery(sql.DeleteItem(CurrentInvoice.Number, i));
-                }
             }
-
-            //update the other lines in case order changed
-            db.ExecuteNonQuery(sql.UpdateInvoices(CurrentInvoice.Number, CurrentInvoice.Date));
-            foreach (LineItem line in CurrentInvoice.LineItems)
+            catch (Exception ex)
             {
-                Console.WriteLine(sql.UpdateLineItems(CurrentInvoice.Number, line.Position, line.ItemOnLine.Code));
-                db.ExecuteNonQuery(sql.UpdateLineItems(CurrentInvoice.Number, line.Position, line.ItemOnLine.Code));
+                throw new Exception(MethodInfo.GetCurrentMethod().DeclaringType.Name + "."
+                    + MethodInfo.GetCurrentMethod().Name + " -> " + ex.Message);
             }
-            CurrentInvoice = GetInvoice(sql.SelectMostRecentInvoice());
 
         }
 
+        /// <summary>
+        /// Removes blank lines from the invoice.
+        /// </summary>
         private void RemoveBlankLines()
         {
-            List<LineItem> itemsToRemove = CurrentInvoice.LineItems.Where(x => x.ItemOnLine.Code == null).ToList();
-            foreach(LineItem line in itemsToRemove)
-            {                
-                CurrentInvoice.LineItems.Remove(line);               
-                
+            try
+            {
+                List<LineItem> itemsToRemove = CurrentInvoice.LineItems.Where(x => x.ItemOnLine.Code == null).ToList();
+                foreach (LineItem line in itemsToRemove)
+                {
+                    CurrentInvoice.LineItems.Remove(line);
+
+                }
+                RecalculateLinePositions();
             }
-            RecalculateLinePositions();
+            catch (Exception ex)
+            {
+                throw new Exception(MethodInfo.GetCurrentMethod().DeclaringType.Name + "."
+                    + MethodInfo.GetCurrentMethod().Name + " -> " + ex.Message);
+            }
         }
 
         /// <summary>
@@ -115,13 +143,21 @@ namespace Group_Assignment.Main
         /// </summary>
         public void SaveToDatabase()
         {
-            RemoveBlankLines();
-            db.ExecuteNonQuery(sql.InsertToInvoices(CurrentInvoice.Date));
-
-            CurrentInvoice.Number = db.ExecuteScalarSQL(sql.SelectMostRecentInvoice());
-            foreach (LineItem line in CurrentInvoice.LineItems)
+            try
             {
-                db.ExecuteNonQuery(sql.InsertToLineItems(CurrentInvoice.Number, line.Position, line.ItemOnLine.Code));
+                RemoveBlankLines();
+                db.ExecuteNonQuery(sql.InsertToInvoices(CurrentInvoice.Date));
+
+                CurrentInvoice.Number = db.ExecuteScalarSQL(sql.SelectMostRecentInvoice());
+                foreach (LineItem line in CurrentInvoice.LineItems)
+                {
+                    db.ExecuteNonQuery(sql.InsertToLineItems(CurrentInvoice.Number, line.Position, line.ItemOnLine.Code));
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(MethodInfo.GetCurrentMethod().DeclaringType.Name + "."
+                    + MethodInfo.GetCurrentMethod().Name + " -> " + ex.Message);
             }
         }
 
@@ -131,20 +167,28 @@ namespace Group_Assignment.Main
         /// <returns>A list of all inventory items</returns>
         public List<Item> GetItems()
         {
-            List<Item> list = new List<Item>();
-            int numRows = 0;
-            DataSet data = new DataSet();
-            data = this.db.ExecuteSQLStatement(sql.SelectItems(), ref numRows);
-            for (int i = 0; i < numRows; i++)
+            try
             {
-                list.Add(new Item
-                {                    
-                Code = data.Tables[0].Rows[i][0].ToString(),
-                Description = data.Tables[0].Rows[i][1].ToString(),
-                Price = (decimal)data.Tables[0].Rows[i][2]
-                });
+                List<Item> list = new List<Item>();
+                int numRows = 0;
+                DataSet data = new DataSet();
+                data = this.db.ExecuteSQLStatement(sql.SelectItems(), ref numRows);
+                for (int i = 0; i < numRows; i++)
+                {
+                    list.Add(new Item
+                    {
+                        Code = data.Tables[0].Rows[i][0].ToString(),
+                        Description = data.Tables[0].Rows[i][1].ToString(),
+                        Price = (decimal)data.Tables[0].Rows[i][2]
+                    });
+                }
+                return list;
             }
-            return list;
+            catch (Exception ex)
+            {
+                throw new Exception(MethodInfo.GetCurrentMethod().DeclaringType.Name + "."
+                    + MethodInfo.GetCurrentMethod().Name + " -> " + ex.Message);
+            }
         }
 
         /// <summary>
@@ -153,16 +197,24 @@ namespace Group_Assignment.Main
         /// <param name="dataGrid"></param>
         public void DeleteLineItem(System.Windows.Controls.DataGrid dataGrid)
         {
-            foreach(LineItem line in CurrentInvoice.LineItems)
+            try
             {
-                if(line.Equals(dataGrid.SelectedItem))
+                foreach (LineItem line in CurrentInvoice.LineItems)
                 {
-                    CurrentInvoice.LineItems.Remove(line);
-                    break;
+                    if (line.Equals(dataGrid.SelectedItem))
+                    {
+                        CurrentInvoice.LineItems.Remove(line);
+                        break;
+                    }
                 }
+                RecalculateLinePositions();
+                CurrentInvoice.GetTotal();
             }
-            RecalculateLinePositions();
-            CurrentInvoice.GetTotal();
+            catch (Exception ex)
+            {
+                throw new Exception(MethodInfo.GetCurrentMethod().DeclaringType.Name + "."
+                    + MethodInfo.GetCurrentMethod().Name + " -> " + ex.Message);
+            }
         }
 
         /// <summary>
@@ -170,9 +222,17 @@ namespace Group_Assignment.Main
         /// </summary>
         public void RecalculateLinePositions()
         {
-            for(int i = 0; i < currentInvoice.LineItems.Count; i++)
+            try
             {
-                CurrentInvoice.LineItems[i].Position = i + 1;
+                for (int i = 0; i < currentInvoice.LineItems.Count; i++)
+                {
+                    CurrentInvoice.LineItems[i].Position = i + 1;
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(MethodInfo.GetCurrentMethod().DeclaringType.Name + "."
+                    + MethodInfo.GetCurrentMethod().Name + " -> " + ex.Message);
             }
         }
 
@@ -196,7 +256,7 @@ namespace Group_Assignment.Main
         /// <summary>
         /// Returns the invoice with the given invoice number
         /// </summary>
-        /// <param name="invoiceNumber">The invoice number of the desired invoice</param>
+        /// <param name="invoiceNumber">The invoice number of the desired invoice or a subquery to retrieve the desired invoice number</param>
         /// <returns>The invoice with the given invoice</returns>
         public Invoice GetInvoice(string invoiceNumber)
         {
@@ -227,6 +287,7 @@ namespace Group_Assignment.Main
                     });
                 }
                 inv.LineItems = lines;
+                inv.GetTotal();
                 return inv;
             }
             catch (Exception ex)
@@ -234,6 +295,29 @@ namespace Group_Assignment.Main
                 throw new Exception(MethodInfo.GetCurrentMethod().DeclaringType.Name + "."
                     + MethodInfo.GetCurrentMethod().Name + " -> " + ex.Message);
             }
+        }
+
+        /// <summary>
+        /// Deletes saved invoice from the database, or discards newly created invoice.
+        /// </summary>
+        public void DeleteInvoice()
+        {
+            try
+            {
+                if (!currentInvoice.Number.Equals("TBD"))
+                {
+                    db.ExecuteNonQuery(sql.DeleteAllLineItems(CurrentInvoice.Number));
+                    db.ExecuteNonQuery(sql.DeleteInvoice(CurrentInvoice.Number));
+                }
+
+                CurrentInvoice = GetInvoice(sql.SelectMostRecentInvoice());
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(MethodInfo.GetCurrentMethod().DeclaringType.Name + "."
+                    + MethodInfo.GetCurrentMethod().Name + " -> " + ex.Message);
+            }
+
         }
     }
 }

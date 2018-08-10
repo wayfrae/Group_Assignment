@@ -97,9 +97,35 @@ namespace Group_Assignment.Main
             return "SELECT COUNT(*) FROM LineItems WHERE InvoiceNum=" + invoiceNumber;
         }
 
-        public string DeleteItem(string invoiceNumber, int position)
+        /// <summary>
+        /// Returns a sql statement that deletes a line item with the specified invoice number and line position
+        /// </summary>
+        /// <param name="invoiceNumber">The invoice number to delete from</param>
+        /// <param name="position">The line position to delete.</param>
+        /// <returns>a sql statement that deletes a line item with the specified invoice number and line position</returns>
+        public string DeleteLineItem(string invoiceNumber, int position)
         {
             return "DELETE FROM LineItems WHERE InvoiceNum=" + invoiceNumber + " AND LineItemNum=" + position;
+        }
+
+        /// <summary>
+        /// Returns a sql statement that deletes all lines from the LineItems table.
+        /// </summary>
+        /// <param name="invoiceNumber">The invoice number to delete.</param>
+        /// <returns>a sql statement that deletes all lines from the LineItems table.</returns>
+        public string DeleteAllLineItems(string invoiceNumber)
+        {
+            return "DELETE FROM LineItems WHERE InvoiceNum=" + invoiceNumber;
+        }
+
+        /// <summary>
+        /// Returns a sql statement that deletes the specified invoice from the Invoices table
+        /// </summary>
+        /// <param name="invoiceNumber"></param>
+        /// <returns>a sql statement that deletes the specified invoice from the Invoices table</returns>
+        public string DeleteInvoice(string invoiceNumber)
+        {
+            return "DELETE FROM Invoices WHERE InvoiceNum=" + invoiceNumber;
         }
     }
 }

@@ -95,32 +95,11 @@
                     <Style BasedOn="{StaticResource MaterialDesignSubheadingTextBlock}" TargetType="TextBlock" />                    
                 </Style.Resources>
             </Style>
-            
+
             <Style TargetType="Grid">
                 <Style.Resources>
-                    <Style TargetType="StackPanel">
-                        <Setter Property="Grid.ColumnSpan" Value="2" />
-                        <Setter Property="Margin" Value="10" />
-                        <Setter Property="HorizontalAlignment" Value="Stretch" />
-                        <Style.Resources>                            
-                            <Style TargetType="materialDesign:Card">
-                                <Setter Property="IsEnabled" Value="{Binding IsChecked, ElementName=EditInvoice}" />
-                                <Setter Property="MinHeight" Value="425" />
-                                <Style.Resources>
-                                    <Style TargetType="StackPanel">
-                                        <Style.Resources>
-                                            <Style BasedOn="{StaticResource MaterialDesignTitleTextBlock}" TargetType="TextBlock">
-                                                <Setter Property="Grid.RowSpan" Value="2" />
-                                                <Setter Property="Margin" Value="10,10,0,-5" />
-                                            </Style>
-                                            
-                                        </Style.Resources>
-                                    </Style>
-                                </Style.Resources>
-                            </Style>
-                            
-                        </Style.Resources>
-                    </Style>
+                    
+
                     <Style BasedOn="{StaticResource MaterialDesignMultiFloatingActionAccentPopupBox}" TargetType="materialDesign:PopupBox">
                         <Setter Property="Grid.Column" Value="1" />
                         <Setter Property="Margin" Value="20" />
@@ -132,8 +111,31 @@
                     </Style>
                 </Style.Resources>
             </Style>
-            
-           
+
+            <Style x:Key="MainStackPanel" TargetType="StackPanel">
+                <Setter Property="Grid.ColumnSpan" Value="2" />
+                <Setter Property="Margin" Value="10" />
+                <Setter Property="HorizontalAlignment" Value="Stretch" />
+                <Style.Resources>
+                    <Style TargetType="TextBlock" BasedOn="{StaticResource MaterialDesignTitleTextBlock}" />
+                    <Style TargetType="materialDesign:Card">
+                        <Setter Property="IsEnabled" Value="{Binding IsChecked, ElementName=EditInvoice}" />
+                        <Setter Property="MinHeight" Value="425" />
+                        <Style.Resources>
+                            <Style TargetType="StackPanel">
+                                <Style.Resources>
+                                    <Style BasedOn="{StaticResource MaterialDesignTitleTextBlock}" TargetType="TextBlock">
+                                        <Setter Property="Grid.RowSpan" Value="2" />
+                                        <Setter Property="Margin" Value="10,10,0,-5" />
+                                    </Style>
+
+                                </Style.Resources>
+                            </Style>
+                        </Style.Resources>
+                    </Style>
+
+                </Style.Resources>
+            </Style>
 
             <Style x:Key="DatePicker" BasedOn="{StaticResource MaterialDesignFloatingHintDatePicker}" TargetType="DatePicker">
                 <Setter Property="Width" Value="200" />

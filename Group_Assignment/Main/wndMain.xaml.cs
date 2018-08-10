@@ -168,22 +168,26 @@ namespace Group_Assignment
         /// <param name="e"></param>
         private void NewInvoice_Click(object sender, RoutedEventArgs e)
         {
-            Button btn = (Button)sender;
-            btn.IsEnabled = false;
-            mainLogic.CurrentInvoice = new Invoice
+            try
             {
-                Number = "TBD",
-                LineItems = new ObservableCollection<LineItem>(),
-                Date = DateTime.Now,
-                Total = "Total Due: $0.00"
-            };
+                Button btn = (Button)sender;
+                btn.IsEnabled = false;
+                mainLogic.CurrentInvoice = new Invoice
+                {
+                    Number = "TBD",
+                    LineItems = new ObservableCollection<LineItem>(),
+                    Date = DateTime.Now,
+                    Total = "Total Due: $0.00"
+                };
 
-            EditInvoice.IsChecked = true;
-            DataGridOrderSummary.IsEnabled = true;
-            ButtonEditInvoice.ToolTip = "Save Invoice";
-            
-            
-            
+                EditInvoice.IsChecked = true;
+                DataGridOrderSummary.IsEnabled = true;
+                ButtonEditInvoice.ToolTip = "Save Invoice";
+            }
+            catch (Exception ex)
+            {
+                HandleException(MethodInfo.GetCurrentMethod().DeclaringType.Name, MethodInfo.GetCurrentMethod().Name, ex.Message);
+            }
         }
 
         /// <summary>
@@ -193,7 +197,14 @@ namespace Group_Assignment
         /// <param name="e"></param>
         private void DataGridOrderSummary_CellEditEnding(object sender, DataGridCellEditEndingEventArgs e)
         {
-            mainLogic.CurrentInvoice.GetTotal();
+            try
+            {
+                mainLogic.CurrentInvoice.GetTotal();
+            }
+            catch (Exception ex)
+            {
+                HandleException(MethodInfo.GetCurrentMethod().DeclaringType.Name, MethodInfo.GetCurrentMethod().Name, ex.Message);
+            }
         }
 
         /// <summary>
@@ -204,12 +215,18 @@ namespace Group_Assignment
         private void DataGridOrderSummary_AddingNewItem(object sender, AddingNewItemEventArgs e)
         {
 
-            e.NewItem = new LineItem
+            try
             {
-                Position = DataGridOrderSummary.Items.Count,
-                ItemOnLine = new Item()
-            };
-
+                e.NewItem = new LineItem
+                {
+                    Position = DataGridOrderSummary.Items.Count,
+                    ItemOnLine = new Item()
+                };
+            }
+            catch (Exception ex)
+            {
+                HandleException(MethodInfo.GetCurrentMethod().DeclaringType.Name, MethodInfo.GetCurrentMethod().Name, ex.Message);
+            }
         }
 
 
@@ -233,22 +250,95 @@ namespace Group_Assignment
         }
 
         /// <summary>
-        /// When user deletes row with the DELETE key, recalculate line positions
+        /// When user Deletes row with the DELETE key, this method recalculates line positions
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
         private void DataGridOrderSummary_PreviewKeyUp(object sender, KeyEventArgs e)
         {
-            if(e.Key == Key.Delete)
+            try
             {
-                mainLogic.RecalculateLinePositions();
-                mainLogic.CurrentInvoice.GetTotal();
+                if (e.Key == Key.Delete)
+                {
+                    mainLogic.RecalculateLinePositions();
+                    mainLogic.CurrentInvoice.GetTotal();
+                }
+            }
+            catch (Exception ex)
+            {
+                HandleException(MethodInfo.GetCurrentMethod().DeclaringType.Name, MethodInfo.GetCurrentMethod().Name, ex.Message);
             }
         }
 
+        /// <summary>
+        /// Deletes item from the list when the user uses the context menu
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void MenuItem_Click(object sender, RoutedEventArgs e)
         {
-            mainLogic.DeleteLineItem(DataGridOrderSummary);
+            try
+            {
+                mainLogic.DeleteLineItem(DataGridOrderSummary);
+            }
+            catch (Exception ex)
+            {
+                HandleException(MethodInfo.GetCurrentMethod().DeclaringType.Name, MethodInfo.GetCurrentMethod().Name, ex.Message);
+            }
+        }
+
+        /// <summary>
+        /// Delete invoice when delete button is clicked.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void DeleteButton_Click(object sender, RoutedEventArgs e)
+        {
+            try
+            {                
+                mainLogic.DeleteInvoice();
+                DataGridOrderSummary.IsEnabled = false;
+                EditInvoice.IsChecked = false;
+                ButtonNewInvoice.IsEnabled = true;
+                ButtonEditInvoice.ToolTip = "Edit Invoice";
+
+            }
+            catch (Exception ex)
+            {
+                HandleException(MethodInfo.GetCurrentMethod().DeclaringType.Name, MethodInfo.GetCurrentMethod().Name, ex.Message);
+            }
+        }
+
+        /// <summary>
+        /// Scrolls the DataGrid even when mouse is not over it. 
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void Window_PreviewMouseWheel(object sender, MouseWheelEventArgs e)
+        {
+            try
+            {
+                if (Scroller.IsMouseOver == false)
+                {
+                    if (e.Delta < 0)
+                    {
+                        Scroller.LineDown();
+                        Scroller.LineDown();
+                        Scroller.LineDown();
+                    }
+
+                    if (e.Delta > 0)
+                    {
+                        Scroller.LineUp();
+                        Scroller.LineUp();
+                        Scroller.LineUp();
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                HandleException(MethodInfo.GetCurrentMethod().DeclaringType.Name, MethodInfo.GetCurrentMethod().Name, ex.Message);
+            }
         }
     }
 }
