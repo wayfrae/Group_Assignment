@@ -11,8 +11,10 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
+using WpfApp3;
 
-namespace Group_Assignment.Items
+
+namespace WpfApp1.Items
 {
     /// <summary>
     /// Interaction logic for wndItems.xaml
@@ -22,6 +24,58 @@ namespace Group_Assignment.Items
         public wndItems()
         {
             InitializeComponent();
+            Onload();
+        }
+
+        void Onload()
+        {
+            ItemDataGrid.ItemsSource = Item.SelectItem();
+        }
+
+        void Clear()
+        {
+            ItemDataGrid.ItemsSource = null;
+            TextBoxCode.IsReadOnly = false;
+            TextBoxCode.Text = "";
+            TextBoxCost.Text = "";
+            TextBoxDesc.Text = "";
+        }
+
+        private void ButtonNew_Click(object sender, RoutedEventArgs e)
+        {
+            Clear();
+            Onload();
+        }
+
+        private void ButtonSave_Click(object sender, RoutedEventArgs e)
+        {
+            Item it = new Item();
+            it.ItemCode = TextBoxCode.Text;
+            it.ItemDesc = TextBoxDesc.Text;
+            it.ItemPrice = Convert.ToDecimal(TextBoxCost.Text);
+            if (Item.UpdateItem(it))
+            {
+                MessageBox.Show("item Updated");
+                Clear();
+                Onload();
+            }
+            else
+                MessageBox.Show("Item not updated");
+        }
+
+        private void ButtonClose_Click(object sender, RoutedEventArgs e)
+        {
+            this.Close();
+        }
+
+        private void ItemDataGrid_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (ItemDataGrid.SelectedValue == null) return;
+            Item it = (Item)ItemDataGrid.SelectedValue;
+            TextBoxCode.IsReadOnly = true;
+            TextBoxCode.Text = it.ItemCode;
+            TextBoxDesc.Text = it.ItemDesc;
+            TextBoxCost.Text = it.ItemPrice.ToString();
         }
     }
 }

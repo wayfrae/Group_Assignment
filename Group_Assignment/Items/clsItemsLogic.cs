@@ -1,147 +1,88 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data.OleDb;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Group_Assignment.Items
+namespace WpfApp3
 {
-    class clsItemsLogic
-    {
-
-
-    }
     class Item
-
     {
-        /// <summary>
-        /// boolean value to store if item is being used in any invoice
-        /// </summary>
-        public bool isUsed { get; set; }
-        /// <summary>
-        /// boolean value to store if an item has changed and needs to be updated in the database
-        /// </summary>
-        public bool HasChanged { get; set; }
+        public String ItemCode { get; set; }
+        public String ItemDesc { get; set; }
+        public decimal? ItemPrice { get; set; }
 
-        /// <summary>
-
-        /// The code associated with the item
-
-        /// </summary>
-
-        public string Code { get; set; }
-
-
-
-        /// <summary>
-
-        /// The description of the item
-
-        /// </summary>
-
-        public string Description { get; set; }
-
-
-
-        /// <summary>
-
-        /// The price of the item.
-
-        /// </summary>
-
-        public decimal Price { get; set; }
-
-
-
-        /// <summary>
-
-        /// Returns the description of the item.
-
-        /// </summary>
-
-        /// <returns>The description of the item.</returns>
-
-        public override string ToString()
-
+        public static List<Item> SelectItem()
         {
+            List<Item> items = new List<Item>();
+            using (OleDbConnection db = Database.GetConnection())
+            {
+                db.Open();
 
-            return this.Description;
-
+                OleDbCommand command = new OleDbCommand("Select * from ItemDesc", db);
+                OleDbDataReader read = command.ExecuteReader();
+                while (read.Read())
+                {
+                    items.Add(new Item() { ItemCode = read.GetString(0) ?? "", ItemDesc = read.GetString(1) ?? "", ItemPrice = read.GetDecimal(2) });
+                }
+                db.Close();
+            }
+            return items;
         }
 
-    }
-
-    class LineItem
-
-    {
-
-        /// <summary>
-
-        /// The line position of the item
-
-        /// </summary>
-
-        public int Position { get; set; }
-
-
-
-        /// <summary>
-
-        /// The quantity of the item
-
-        /// </summary>
-
-        public int Quantity { get; set; }
-
-
-
-        /// <summary>
-
-        /// The item being purchased.
-
-        /// </summary>
-
-        public Item Description { get; set; }
-
-
-
-        /// <summary>
-
-        /// The price of the item.
-
-        /// </summary>
-
-        public decimal Price { get; set; }
-
-
-
-        /// <summary>
-
-        /// The total of the line. (Quantity * Price)
-
-        /// </summary>
-
-        public decimal Total
-
+        public static bool DeleteItem(Item item)
         {
-
-            get
-
-            {
-
-                return Total;
-
-            }
-
-            set
-
-            {
-
-                this.Total = this.Quantity * this.Price;
-
-            }
-
+            return DeleteItem(item.ItemCode);
         }
 
+        public static bool DeleteItem(String ItemCode)
+        {
+            using (OleDbConnection db = Database.GetConnection())
+            {
+                db.Open();
+                OleDbCommand command = new OleDbCommand("Delete From ItemDesc Where ItemCode = @ItemCode ", db);
+                command.Parameters.Add(ItemCode);
+                return (command.ExecuteNonQuery() == 0) ? false : true;
+            }
+        }
+
+        public static bool SaveToDatabase(Item item)
+        {
+            using (OleDbConnection db = Database.GetConnection())
+            {
+                db.Open();
+                OleDbCommand command = new OleDbCommand("Insert into ItemDesc(ItemCode, ItemDesc, Cost) Values(@ItemCode, @ItemDesc, @Cost) ", db);
+                command.Parameters.Add(new OleDbParameter("@ItemCode", item.ItemCode));
+                command.Parameters.Add(new OleDbParameter("@ItemDesc", item.ItemDesc));
+                command.Parameters.Add(new OleDbParameter("@Cost", item.ItemPrice));
+                return (command.ExecuteNonQuery() == 0) ? false : true;
+            }
+        }
+
+        public static bool SaveToDatabase(List<Item> items)
+        {
+            bool flag = true;
+            foreach (Item item in items)
+            {
+                flag = SaveToDatabase(item);
+            }
+            return flag;
+        }
+
+        public static bool UpdateItem(Item item)
+        {
+            if (item.ItemCode == null) return false;
+            using (OleDbConnection db = Database.GetConnection())
+            {
+                db.Open();
+                OleDbCommand command = new OleDbCommand("Update ItemDesc Set Items = @Items, Cost = @Cost Where ItemCode = @ItemCode ", db);
+                command.Parameters.AddRange(new OleDbParameter[] {
+                new OleDbParameter("@Items", item.ItemDesc),
+                new OleDbParameter("@Cost", item.ItemPrice),
+                new OleDbParameter("@ItemCode", item.ItemCode) });
+                return (command.ExecuteNonQuery() == 0) ? false : true;
+            }
+        }
     }
 }
