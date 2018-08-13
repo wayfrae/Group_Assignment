@@ -9,7 +9,7 @@ namespace WpfApp3
 {
     class Item
     {
-        Database sql = new Database();
+         
 
         public String ItemCode { get; set; }
         public String ItemDesc { get; set; }
@@ -21,7 +21,7 @@ namespace WpfApp3
             using (OleDbConnection db = Database.GetConnection())
             {
                 db.Open();
-
+                Database sql = new Database();
                 OleDbCommand command = new OleDbCommand(sql.select(), db);
                 OleDbDataReader read = command.ExecuteReader();
                 while (read.Read())
@@ -42,8 +42,9 @@ namespace WpfApp3
         {
             using (OleDbConnection db = Database.GetConnection())
             {
+                Database sql = new Database();
                 db.Open();
-                OleDbCommand command = new OleDbCommand("Delete From ItemDesc Where ItemCode = @ItemCode ", db);
+                OleDbCommand command = new OleDbCommand(sql.deletefrom(), db);
                 command.Parameters.Add(ItemCode);
                 return (command.ExecuteNonQuery() == 0) ? false : true;
             }
@@ -54,7 +55,8 @@ namespace WpfApp3
             using (OleDbConnection db = Database.GetConnection())
             {
                 db.Open();
-                OleDbCommand command = new OleDbCommand("Insert into ItemDesc(ItemCode, ItemDesc, Cost) Values(@ItemCode, @ItemDesc, @Cost) ", db);
+                Database sql = new Database();
+                OleDbCommand command = new OleDbCommand(sql.saveitem(), db);
                 command.Parameters.Add(new OleDbParameter("@ItemCode", item.ItemCode));
                 command.Parameters.Add(new OleDbParameter("@ItemDesc", item.ItemDesc));
                 command.Parameters.Add(new OleDbParameter("@Cost", item.ItemPrice));
@@ -78,7 +80,8 @@ namespace WpfApp3
             using (OleDbConnection db = Database.GetConnection())
             {
                 db.Open();
-                OleDbCommand command = new OleDbCommand("Update ItemDesc Set Items = @Items, Cost = @Cost Where ItemCode = @ItemCode ", db);
+                Database sql = new Database();
+                OleDbCommand command = new OleDbCommand(sql.update(), db);
                 command.Parameters.AddRange(new OleDbParameter[] {
                 new OleDbParameter("@Items", item.ItemDesc),
                 new OleDbParameter("@Cost", item.ItemPrice),

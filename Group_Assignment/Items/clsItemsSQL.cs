@@ -22,5 +22,20 @@ namespace WpfApp3
             return "Select* from ItemDesc";
         }
 
+        public string deletefrom()
+        {
+            return "Delete From ItemDesc Where ItemCode = @ItemCode ";
+        }
+
+        public string saveitem()
+        {
+            return "Insert into ItemDesc(ItemCode, ItemDesc, Cost) Values(@ItemCode, @ItemDesc, @Cost) ";
+        }
+
+        public string update()
+        {
+            return "Update ItemDesc Set Items = @Items, Cost = @Cost Where ItemCode = @ItemCode ";
+        }
+
     }
 }
