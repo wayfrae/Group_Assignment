@@ -1,4 +1,6 @@
-﻿namespace Group_Assignment
+﻿using System;
+
+namespace Group_Assignment
 {
     /// <summary>
     /// Class that represents a line on the invoice
@@ -13,7 +15,8 @@
         /// <summary>
         /// The item being purchased.
         /// </summary>
-        public Item ItemOnLine { get; set; }        
-        
+        public Item ItemOnLine { get; set; }
+
+
     }
 }

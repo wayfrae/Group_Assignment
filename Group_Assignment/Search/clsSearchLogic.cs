@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Data;
 using System.Linq;
 using System.Reflection;
@@ -21,9 +22,9 @@ namespace Group_Assignment.Search
         /// </summary>
         clsSearchSQL sql;
 
-        private List<Item> hiddenList;
+        private List<Invoice> hiddenList;
 
-        public List<Item> displayList
+        public List<Invoice> displayList
         {
             get
             {
@@ -94,21 +95,21 @@ namespace Group_Assignment.Search
         /// <summary>
         /// List of all items
         /// </summary>
-        public List<Item> AllItems()
+        private List<Invoice> AllItems()
         {
-            List<Item> list = new List<Item>();
+            List<Invoice> list = new List<Invoice>();
+            List<LineItem> lineList = new List<LineItem>
             int numRows = 0;
             DataSet data = new DataSet();
             data = this.db.ExecuteSQLStatement(sql.SelectAll(), ref numRows);
-                for (int i = 0; i<numRows; i++)
+            for (int i = 0; i < numRows; i++)
+            {
+                list.Add(new Invoice
                 {
-                    list.Add(new Item
-                    {
-                        Code = data.Tables[0].Rows[i][0].ToString(),
-                        Description = data.Tables[0].Rows[i][1].ToString(),
-                        Price = (decimal) data.Tables[0].Rows[i][2]
-                    });
-                }
+                    Number = data.Tables[0].Rows[i][5].ToString(),
+                    Date = DateTime.Parse(data.Tables[0].Rows[i][0].ToString()),
+                    LineItems = new ObservableCollection<LineItem>().Add(new LineItem { Position = (int)data.Tables[0].Rows[i][4], ItemOnLine = new Item() { Code = data.Tables[0].Rows[i][1].ToString(), Description = data.Tables[0].Rows[i][2].ToString(), Price = (decimal)data.Tables[0].Rows[i][3] } })
+                });
             return list;
         }
 
@@ -138,9 +139,9 @@ namespace Group_Assignment.Search
         public List<string> allInvoiceDate()
         {
             List<string> list = new List<string>();
-            int numRows = 0;
+            int Rows = 0;
             DataSet data = new DataSet();
-            data = this.db.ExecuteSQLStatement(sql.SelectAllDate(), ref numRows);
+            data = this.db.ExecuteSQLStatement(sql.SelectAllDate(), ref Rows);
             for (int i = 0; i < numRows; i++)
             {
                 list.Add(data.Tables[0].Rows[i][0].ToString());

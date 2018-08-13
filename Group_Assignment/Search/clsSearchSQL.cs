@@ -15,7 +15,7 @@ namespace Group_Assignment.Search
 
         public string SelectAll()
         {
-            string sSQL = "SELECT * FROM ItemDesc";
+            string sSQL = "SELECT * FROM Invoices";
 
             return sSQL;
         }
@@ -55,5 +55,18 @@ namespace Group_Assignment.Search
 
             return sSQL;
         }
+
+        /// <summary>
+        /// Returns a SQL query string that selects all invoice data for the given invoice number
+        /// </summary>
+        /// <param name="invoiceNumber">The invoice number for the desired invoice</param>
+        /// <returns>A query string to retrieve all data for the given invoice</returns>
+        public string SelectAllInvoiceData()
+        {
+            return "SELECT Invoices.InvoiceDate, ItemDesc.ItemCode, ItemDesc.ItemDesc, ItemDesc.Cost, LineItems.LineItemNum, Invoices.InvoiceNum " +
+                "FROM ItemDesc INNER JOIN(Invoices INNER JOIN LineItems ON Invoices.[InvoiceNum] = LineItems.[InvoiceNum])" +
+                " ON ItemDesc.[ItemCode] = LineItems.[ItemCode]";
+        }
+
     }
 }
