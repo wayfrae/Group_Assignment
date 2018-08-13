@@ -13,7 +13,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 
 
-namespace Group_Assignment
+namespace Group_Assignment.Items
 {
     /// <summary>
     /// Interaction logic for wndItems.xaml

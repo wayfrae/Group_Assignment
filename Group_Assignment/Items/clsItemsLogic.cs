@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Group_Assignment
+namespace Group_Assignment.Items
 {
     class clsItemsLogic
     {

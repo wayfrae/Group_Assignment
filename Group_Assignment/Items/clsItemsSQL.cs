@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 using System.IO;
 using System.Data.OleDb;
 using System.Reflection;
-namespace Group_Assignment
+namespace Group_Assignment.Items
 {
     class clsItemsSQL
 
