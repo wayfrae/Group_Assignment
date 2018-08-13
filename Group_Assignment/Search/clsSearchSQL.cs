@@ -13,47 +13,108 @@ namespace Group_Assignment.Search
         /// </summary>
         /// <returns>All data for the invoices.</returns>
 
-        public string SelectAllInvoiceData()
+        public string SelectAll()
         {
             string sSQL = "SELECT * FROM Invoices";
 
             return sSQL;
         }
-        /// <summary>
-        /// This SQL gets all data on an invoice for a given InvoiceID.
-        /// </summary>
-        /// <param name="sInvoiceID">The InvoiceID for the invoice to retrieve all data.</param>
-        /// <returns>All data for the given invoice.</returns>
 
-        public string SelectIdInvoiceData(string sInvoiceID)
+
+        /// <summary>
+        /// This SQL gets all Nums for all invoices.
+        /// </summary>
+        /// <returns>All data for the invoices.</returns>
+
+        public string SelectAllNum()
         {
-            string sSQL = "SELECT * FROM Invoices WHERE InvoiceNum = " + sInvoiceID;
+            string sSQL = "SELECT DISTINCT InvoiceNum FROM Invoices";
 
             return sSQL;
         }
-        /// <summary>
-        /// This SQL gets all data on an invoice for all invoices on a given InvoiceDate.
-        /// </summary>
-        /// <param name="sInvoiceDate">The InvoiceDate for the invoice to retrieve all data.</param>
-        /// <returns>All data for the given InvoiceDate.</returns>
 
-        public string SelectDateInvoiceData(string sInvoiceDate)
+        /// <summary>
+        /// This SQL gets all dates for all invoices
+        /// </summary>
+        /// <returns></returns>
+        public string SelectAllDate()
         {
-            string sSQL = "SELECT * FROM Invoices WHERE InvoiceDate = " + sInvoiceDate;
+            string sSQL = "SELECT DISTINCT InvoiceDate FROM Invoices";
 
             return sSQL;
         }
-        /// <summary>
-        /// This SQL gets all data on an invoice for all invoices with an ItemCode.
-        /// </summary>
-        /// <param name="sItemCode">The ItemCode for the invoice to retrieve all data.</param>
-        /// <returns>All data for the given ItemCode.</returns>
 
-        public string SelectCodeInvoiceData(string sItemCode)
+
+        /// <summary>
+        /// This SQL gets all costs for all invoices
+        /// </summary>
+        /// <returns></returns>
+        public string SelectAllCost()
         {
-            string sSQL = "SELECT * FROM Invoices i JOIN LineItems l on i.InvoiceNum = l.InvoiceNum WHERE ItemCode = " + sItemCode;
+            string sSQL = "SELECT DISTINCT Cost FROM ItemDesc";
 
             return sSQL;
+        }
+
+        /// <summary>
+        /// Returns a SQL query string that selects all invoice data for the given invoice number
+        /// </summary>
+        /// <param name="invoiceNumber">The invoice number for the desired invoice</param>
+        /// <returns>A query string to retrieve all data for the given invoice</returns>
+        public string SelectAllInvoiceData()
+        {
+            return "SELECT Invoices.InvoiceDate, ItemDesc.ItemCode, ItemDesc.ItemDesc, ItemDesc.Cost, LineItems.LineItemNum, Invoices.InvoiceNum " +
+                "FROM ItemDesc INNER JOIN(Invoices INNER JOIN LineItems ON Invoices.[InvoiceNum] = LineItems.[InvoiceNum])" +
+                " ON ItemDesc.[ItemCode] = LineItems.[ItemCode]";
+        }
+
+        public string SelectInvoiceData( bool one, bool two, bool three, string num, string date, string cost)
+        {
+            if (one && !two && !three)
+            {
+                return "SELECT Invoices.InvoiceDate, ItemDesc.ItemCode, ItemDesc.ItemDesc, ItemDesc.Cost, LineItems.LineItemNum, Invoices.InvoiceNum " +
+                    "FROM ItemDesc INNER JOIN(Invoices INNER JOIN LineItems ON Invoices.[InvoiceNum] = LineItems.[InvoiceNum])" +
+                    " ON ItemDesc.[ItemCode] = LineItems.[ItemCode] WHERE Invoices.[InvoiceNum] = " + num;
+            }
+            else if (!one && two && !three)
+            {
+                return "SELECT Invoices.InvoiceDate, ItemDesc.ItemCode, ItemDesc.ItemDesc, ItemDesc.Cost, LineItems.LineItemNum, Invoices.InvoiceNum " +
+                    "FROM ItemDesc INNER JOIN(Invoices INNER JOIN LineItems ON Invoices.[InvoiceNum] = LineItems.[InvoiceNum])" +
+                    " ON ItemDesc.[ItemCode] = LineItems.[ItemCode] WHERE Invoices.[InvoiceDate] = " + date;
+            }
+            else if (!one && !two && three)
+            {
+                return "SELECT Invoices.InvoiceDate, ItemDesc.ItemCode, ItemDesc.ItemDesc, ItemDesc.Cost, LineItems.LineItemNum, Invoices.InvoiceNum " +
+                    "FROM ItemDesc INNER JOIN(Invoices INNER JOIN LineItems ON Invoices.[InvoiceNum] = LineItems.[InvoiceNum])" +
+                    " ON ItemDesc.[ItemCode] = LineItems.[ItemCode] WHERE ItemDesc.[Cost] = " + cost;
+            }
+            else if (one && two && !three)
+            {
+                return "SELECT Invoices.InvoiceDate, ItemDesc.ItemCode, ItemDesc.ItemDesc, ItemDesc.Cost, LineItems.LineItemNum, Invoices.InvoiceNum " +
+                    "FROM ItemDesc INNER JOIN(Invoices INNER JOIN LineItems ON Invoices.[InvoiceNum] = LineItems.[InvoiceNum])" +
+                    " ON ItemDesc.[ItemCode] = LineItems.[ItemCode] WHERE Invoices.InvoiceNum = " + num + " AND Invoices.InvoiceDate = " + date;
+            }
+            else if (!one && two && three)
+            {
+                return "SELECT Invoices.InvoiceDate, ItemDesc.ItemCode, ItemDesc.ItemDesc, ItemDesc.Cost, LineItems.LineItemNum, Invoices.InvoiceNum " +
+                    "FROM ItemDesc INNER JOIN(Invoices INNER JOIN LineItems ON Invoices.[InvoiceNum] = LineItems.[InvoiceNum])" +
+                    " ON ItemDesc.[ItemCode] = LineItems.[ItemCode] WHERE Invoices.InvoiceDate = " + date + " AND ItemDesc.ItemCost = " + cost;
+            }
+            else if (one && !two && three)
+            {
+                return "SELECT Invoices.InvoiceDate, ItemDesc.ItemCode, ItemDesc.ItemDesc, ItemDesc.Cost, LineItems.LineItemNum, Invoices.InvoiceNum " +
+                    "FROM ItemDesc INNER JOIN(Invoices INNER JOIN LineItems ON Invoices.[InvoiceNum] = LineItems.[InvoiceNum])" +
+                    " ON ItemDesc.[ItemCode] = LineItems.[ItemCode] WHERE Invoices.InvoiceNum = " + num + " AND ItemDesc.ItemCost = " + cost;
+            }
+            else if (one && two && three)
+            {
+                return "SELECT Invoices.InvoiceDate, ItemDesc.ItemCode, ItemDesc.ItemDesc, ItemDesc.Cost, LineItems.LineItemNum, Invoices.InvoiceNum " +
+                    "FROM ItemDesc INNER JOIN(Invoices INNER JOIN LineItems ON Invoices.[InvoiceNum] = LineItems.[InvoiceNum])" +
+                    " ON ItemDesc.[ItemCode] = LineItems.[ItemCode] WHERE Invoices.InvoiceNum = " + num + " AND Invoices.InvoiceDate = " + date + " AND ItemDesc.ItemCost = " + cost;
+            }
+            return "SELECT Invoices.InvoiceDate, ItemDesc.ItemCode, ItemDesc.ItemDesc, ItemDesc.Cost, LineItems.LineItemNum, Invoices.InvoiceNum " +
+                "FROM ItemDesc INNER JOIN(Invoices INNER JOIN LineItems ON Invoices.[InvoiceNum] = LineItems.[InvoiceNum])" +
+                " ON ItemDesc.[ItemCode] = LineItems.[ItemCode]";
         }
     }
 }

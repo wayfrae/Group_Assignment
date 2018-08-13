@@ -1,7 +1,10 @@
-﻿using System;
+using System;
+
+=======
 using System.ComponentModel;
 using System.Reflection;
 using System.Runtime.CompilerServices;
+
 
 namespace Group_Assignment
 {
@@ -39,6 +42,11 @@ namespace Group_Assignment
         /// <summary>
         /// The item being purchased.
         /// </summary>
+
+        public Item ItemOnLine { get; set; }
+
+
+=======
         public Item ItemOnLine
         {
             get
@@ -73,5 +81,6 @@ namespace Group_Assignment
                     + MethodInfo.GetCurrentMethod().Name + " -> " + ex.Message);
             }
         }
+
     }
 }
