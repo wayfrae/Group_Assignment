@@ -22,6 +22,10 @@ namespace Group_Assignment.Search
         /// </summary>
         clsSearchSQL sql;
 
+        public bool numSearch;
+        public bool dateSearch;
+        public bool costSearch;
+
         private List<Invoice> hiddenList;
 
         public List<Invoice> displayList
@@ -90,26 +94,63 @@ namespace Group_Assignment.Search
             this.displayNum = allInvoiceNum();
             this.displayDate = allInvoiceDate();
             this.displayCost = allInvoiceCost();
+            numSearch = false;
+            dateSearch = false;
+            costSearch = false;
         }
 
         /// <summary>
         /// List of all items
         /// </summary>
-        private List<Invoice> AllItems()
+        /// List of all items
+        /// </summary>
+        public List<Invoice> AllItems()
         {
             List<Invoice> list = new List<Invoice>();
-            List<LineItem> lineList = new List<LineItem>
+            List<LineItem> lineList = new List<LineItem>();
             int numRows = 0;
             DataSet data = new DataSet();
-            data = this.db.ExecuteSQLStatement(sql.SelectAll(), ref numRows);
+            data = this.db.ExecuteSQLStatement(sql.SelectAllInvoiceData(), ref numRows);
             for (int i = 0; i < numRows; i++)
             {
-                list.Add(new Invoice
+                int index = list.FindIndex(x => x.Number == data.Tables[0].Rows[i][5].ToString());
+                if (index >= 0)
                 {
-                    Number = data.Tables[0].Rows[i][5].ToString(),
-                    Date = DateTime.Parse(data.Tables[0].Rows[i][0].ToString()),
-                    LineItems = new ObservableCollection<LineItem>().Add(new LineItem { Position = (int)data.Tables[0].Rows[i][4], ItemOnLine = new Item() { Code = data.Tables[0].Rows[i][1].ToString(), Description = data.Tables[0].Rows[i][2].ToString(), Price = (decimal)data.Tables[0].Rows[i][3] } })
-                });
+                    list[index].LineItems.Add(new LineItem
+                    {
+                        Position = (int)data.Tables[0].Rows[i][4],
+                        ItemOnLine = new Item
+                        {
+                            Code = data.Tables[0].Rows[i][1].ToString(),
+                            Description = data.Tables[0].Rows[i][2].ToString(),
+                            Price = (decimal)data.Tables[0].Rows[i][3]
+
+                        }
+                    });
+                }
+                else
+                {
+                    ObservableCollection<LineItem> lineItems = new ObservableCollection<LineItem>();
+                    lineItems.Add(new LineItem
+                    {
+                        Position = (int)data.Tables[0].Rows[i][4],
+                        ItemOnLine = new Item
+                        {
+                            Code = data.Tables[0].Rows[i][1].ToString(),
+                            Description = data.Tables[0].Rows[i][2].ToString(),
+                            Price = (decimal)data.Tables[0].Rows[i][3]
+                        }
+                    });
+
+                    list.Add(new Invoice
+                    {
+                        Number = data.Tables[0].Rows[i][5].ToString(),
+                        Date = DateTime.Parse(data.Tables[0].Rows[i][0].ToString()),
+                        LineItems = new ObservableCollection<LineItem>(lineItems)
+                    });
+                }
+            }
+
             return list;
         }
 
@@ -139,9 +180,9 @@ namespace Group_Assignment.Search
         public List<string> allInvoiceDate()
         {
             List<string> list = new List<string>();
-            int Rows = 0;
+            int numRows = 0;
             DataSet data = new DataSet();
-            data = this.db.ExecuteSQLStatement(sql.SelectAllDate(), ref Rows);
+            data = this.db.ExecuteSQLStatement(sql.SelectAllDate(), ref numRows);
             for (int i = 0; i < numRows; i++)
             {
                 list.Add(data.Tables[0].Rows[i][0].ToString());
@@ -159,6 +200,57 @@ namespace Group_Assignment.Search
             {
                 list.Add(data.Tables[0].Rows[i][0].ToString());
             }
+            return list;
+        }
+
+
+        public List<Invoice> SearchItems(string num, string date, string cost)
+        {
+            List<Invoice> list = new List<Invoice>();
+            List<LineItem> lineList = new List<LineItem>();
+            int numRows = 0;
+            DataSet data = new DataSet();
+            data = this.db.ExecuteSQLStatement(sql.SelectInvoiceData(numSearch, dateSearch, costSearch, num, date, cost), ref numRows);
+            for (int i = 0; i < numRows; i++)
+            {
+                int index = list.FindIndex(x => x.Number == data.Tables[0].Rows[i][5].ToString());
+                if (index >= 0)
+                {
+                    list[index].LineItems.Add(new LineItem
+                    {
+                        Position = (int)data.Tables[0].Rows[i][4],
+                        ItemOnLine = new Item
+                        {
+                            Code = data.Tables[0].Rows[i][1].ToString(),
+                            Description = data.Tables[0].Rows[i][2].ToString(),
+                            Price = (decimal)data.Tables[0].Rows[i][3]
+
+                        }
+                    });
+                }
+                else
+                {
+                    ObservableCollection<LineItem> lineItems = new ObservableCollection<LineItem>();
+                    lineItems.Add(new LineItem
+                    {
+                        Position = (int)data.Tables[0].Rows[i][4],
+                        ItemOnLine = new Item
+                        {
+                            Code = data.Tables[0].Rows[i][1].ToString(),
+                            Description = data.Tables[0].Rows[i][2].ToString(),
+                            Price = (decimal)data.Tables[0].Rows[i][3]
+                        }
+                    });
+
+                    list.Add(new Invoice
+                    {
+                        Number = data.Tables[0].Rows[i][5].ToString(),
+                        Date = DateTime.Parse(data.Tables[0].Rows[i][0].ToString()),
+                        LineItems = new ObservableCollection<LineItem>(lineItems)
+                    });
+                }
+            }
+
             return list;
         }
     }

@@ -57,27 +57,34 @@ namespace Group_Assignment.Search
         /// <param name="e"></param>
         private void InvoiceNum_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-
+            logic.numSearch = true;
+            logic.SearchItems(InvoiceNum.Text, InvoiceDate.Text, InvoiceCharge.Text);
         }
 
         private void InvoiceDate_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-
+            logic.dateSearch = true;
+            logic.SearchItems(InvoiceNum.Text, InvoiceDate.Text, InvoiceCharge.Text);
         }
 
         private void InvoiceCharge_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-
+            logic.costSearch = true;
+            logic.SearchItems(InvoiceNum.Text, InvoiceDate.Text, InvoiceCharge.Text);
         }
 
         private void SelectBtn_Click(object sender, RoutedEventArgs e)
         {
-
+            InvoiceNumber = displayGrid.SelectedCells.ToString();
+            this.Hide();
         }
 
         private void ClearBtn_Click(object sender, RoutedEventArgs e)
         {
             displayGrid.ItemsSource = logic.AllItems();
+            logic.numSearch = false;
+            logic.dateSearch = false;
+            logic.costSearch = false;
         }
     }
 }
