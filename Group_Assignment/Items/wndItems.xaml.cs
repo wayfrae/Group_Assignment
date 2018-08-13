@@ -12,6 +12,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 
+
 namespace Group_Assignment.Items
 {
     /// <summary>
@@ -19,35 +20,61 @@ namespace Group_Assignment.Items
     /// </summary>
     public partial class wndItems : Window
     {
-        /// <summary>
-        /// boolean value to store if an item has changed to let the main window know if it needs to update the items list
-        /// </summary>
-        public bool HasChanged { get; set; }
-
         public wndItems()
         {
             InitializeComponent();
+            Onload();
         }
 
-        /// <summary>
-        /// Hides the window instead of closing it
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
+        void Onload()
         {
-            e.Cancel = true;
-            this.Hide();
+            ItemDataGrid.ItemsSource = clsItemsLogic.SelectItem();
         }
 
-        /// <summary>
-        /// Hides the window
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private void Button_Click(object sender, RoutedEventArgs e)
+        void Clear()
         {
-            this.Hide();
+            ItemDataGrid.ItemsSource = null;
+            TextBoxCode.IsReadOnly = false;
+            TextBoxCode.Text = "";
+            TextBoxCost.Text = "";
+            TextBoxDesc.Text = "";
+        }
+
+        private void ButtonNew_Click(object sender, RoutedEventArgs e)
+        {
+            Clear();
+            Onload();
+        }
+
+        private void ButtonSave_Click(object sender, RoutedEventArgs e)
+        {
+            clsItemsLogic it = new clsItemsLogic();
+            it.ItemCode = TextBoxCode.Text;
+            it.ItemDesc = TextBoxDesc.Text;
+            it.ItemPrice = Convert.ToDecimal(TextBoxCost.Text);
+            if (clsItemsLogic.UpdateItem(it))
+            {
+                MessageBox.Show("item Updated");
+                Clear();
+                Onload();
+            }
+            else
+                MessageBox.Show("Item not updated");
+        }
+
+        private void ButtonClose_Click(object sender, RoutedEventArgs e)
+        {
+            this.Close();
+        }
+
+        private void ItemDataGrid_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (ItemDataGrid.SelectedValue == null) return;
+            clsItemsLogic it = (clsItemsLogic)ItemDataGrid.SelectedValue;
+            TextBoxCode.IsReadOnly = true;
+            TextBoxCode.Text = it.ItemCode;
+            TextBoxDesc.Text = it.ItemDesc;
+            TextBoxCost.Text = it.ItemPrice.ToString();
         }
     }
 }
