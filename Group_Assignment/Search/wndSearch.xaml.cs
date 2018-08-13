@@ -49,7 +49,7 @@ namespace Group_Assignment.Search
             this.Hide();
         }
 
-
+        
         /// <summary>
         /// Updates the datagrid when selection is made
         /// </summary>

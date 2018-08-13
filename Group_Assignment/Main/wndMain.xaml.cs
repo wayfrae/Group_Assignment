@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
 using System.Reflection;
@@ -54,7 +55,7 @@ namespace Group_Assignment
                 windowItems = new wndItems();
                 windowSearch = new wndSearch();
                 mainLogic = new clsMainLogic();
-                StackPanelMain.DataContext = mainLogic;
+                GridMain.DataContext = mainLogic;
                 ComboBoxItems.ItemsSource = mainLogic.Items;
             }
             catch (Exception ex)
@@ -79,10 +80,10 @@ namespace Group_Assignment
                 windowItems.ShowDialog();
                 //TODO: Check the flag for an update and update the items dropdown if there was a change
                 //check if there was a change to the items, if there was a change update the items dropdown
-                //if(windowItems.HasChanged == true)
-                //{
-                //    mainLogic.GetItems();
-                //}
+                if(windowItems.HasChanged == true)
+                {
+                    mainLogic.GetItems();
+                }
                 this.Left = windowItems.Left;
                 this.Top = windowItems.Top;
                 this.Show();
@@ -109,7 +110,10 @@ namespace Group_Assignment
                 windowSearch.ShowDialog();
                 //TODO: Get the selected invoice and display it
                 //get the invoice selected by the search
-                //mainLogic.CurrentInvoice = mainLogic.GetInvoice(windowSearch.InvoiceNumber);
+                if(windowSearch.InvoiceNumber != null)
+                {
+                    mainLogic.CurrentInvoice = mainLogic.GetInvoice(windowSearch.InvoiceNumber);
+                }
                 this.Left = windowSearch.Left;
                 this.Top = windowSearch.Top;
                 this.Show();
@@ -131,13 +135,29 @@ namespace Group_Assignment
             {
                 if (EditInvoice.IsChecked == true)
                 {
-                    DataGridOrderSummary.CanUserAddRows = true;
+                    DataGridOrderSummary.IsEnabled = true;
                     ButtonEditInvoice.ToolTip = "Save Invoice";
+                    ButtonNewInvoice.IsEnabled = false;
+                    
                 }
                 else
                 {
-                    DataGridOrderSummary.CanUserAddRows = false;
+                    //save is clicked
+                    if (mainLogic.CurrentInvoice.Number.Equals("TBD"))
+                    {
+                        mainLogic.SaveToDatabase();
+                    }
+                    else
+                    {
+                        mainLogic.UpdateDatabase();
+                    }
+                    DataGridOrderSummary.IsEnabled = false;
                     ButtonEditInvoice.ToolTip = "Edit Invoice";
+                    ButtonNewInvoice.IsEnabled = true;
+                    DataGridOrderSummary.SelectedIndex = -1;
+                    
+
+
                 }
             }
             catch (Exception ex)
@@ -145,6 +165,75 @@ namespace Group_Assignment
                 HandleException(MethodInfo.GetCurrentMethod().DeclaringType.Name, MethodInfo.GetCurrentMethod().Name, ex.Message);
             }
         }
+
+        /// <summary>
+        /// Creates a new invoice when clicked
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void NewInvoice_Click(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                Button btn = (Button)sender;
+                btn.IsEnabled = false;
+                mainLogic.CurrentInvoice = new Invoice
+                {
+                    Number = "TBD",
+                    LineItems = new ObservableCollection<LineItem>(),
+                    Date = DateTime.Now,
+                    Total = "Total Due: $0.00"
+                };
+
+                EditInvoice.IsChecked = true;
+                DataGridOrderSummary.IsEnabled = true;
+                ButtonEditInvoice.ToolTip = "Save Invoice";
+            }
+            catch (Exception ex)
+            {
+                HandleException(MethodInfo.GetCurrentMethod().DeclaringType.Name, MethodInfo.GetCurrentMethod().Name, ex.Message);
+            }
+        }
+
+        /// <summary>
+        /// Updates the total when the cell is done being edited
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void DataGridOrderSummary_CellEditEnding(object sender, DataGridCellEditEndingEventArgs e)
+        {
+            try
+            {
+                mainLogic.CurrentInvoice.GetTotal();
+            }
+            catch (Exception ex)
+            {
+                HandleException(MethodInfo.GetCurrentMethod().DeclaringType.Name, MethodInfo.GetCurrentMethod().Name, ex.Message);
+            }
+        }
+
+        /// <summary>
+        /// Adds a new line item with the proper position
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void DataGridOrderSummary_AddingNewItem(object sender, AddingNewItemEventArgs e)
+        {
+
+            try
+            {
+                e.NewItem = new LineItem
+                {
+                    Position = DataGridOrderSummary.Items.Count,
+                    ItemOnLine = new Item()
+                };
+            }
+            catch (Exception ex)
+            {
+                HandleException(MethodInfo.GetCurrentMethod().DeclaringType.Name, MethodInfo.GetCurrentMethod().Name, ex.Message);
+            }
+        }
+
 
         /// <summary>
         /// Handles the exception by showing a message box with user friendly stack trace. Will write to Console.Error if message box fails.
@@ -165,6 +254,113 @@ namespace Group_Assignment
             }
         }
 
-        
+        /// <summary>
+        /// When user Deletes row with the DELETE key, this method recalculates line positions
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void DataGridOrderSummary_PreviewKeyUp(object sender, KeyEventArgs e)
+        {
+            try
+            {
+                if (e.Key == Key.Delete)
+                {
+                    mainLogic.RecalculateLinePositions();
+                    mainLogic.CurrentInvoice.GetTotal();
+                }
+            }
+            catch (Exception ex)
+            {
+                HandleException(MethodInfo.GetCurrentMethod().DeclaringType.Name, MethodInfo.GetCurrentMethod().Name, ex.Message);
+            }
+        }
+
+        /// <summary>
+        /// Deletes item from the list when the user uses the context menu
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void MenuItem_Click(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                mainLogic.DeleteLineItem(DataGridOrderSummary);
+            }
+            catch (Exception ex)
+            {
+                HandleException(MethodInfo.GetCurrentMethod().DeclaringType.Name, MethodInfo.GetCurrentMethod().Name, ex.Message);
+            }
+        }
+
+        /// <summary>
+        /// Delete invoice when delete button is clicked.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void DeleteButton_Click(object sender, RoutedEventArgs e)
+        {
+            try
+            {                
+                mainLogic.DeleteInvoice();
+                DataGridOrderSummary.IsEnabled = false;
+                EditInvoice.IsChecked = false;
+                ButtonNewInvoice.IsEnabled = true;
+                ButtonEditInvoice.ToolTip = "Edit Invoice";
+
+            }
+            catch (Exception ex)
+            {
+                HandleException(MethodInfo.GetCurrentMethod().DeclaringType.Name, MethodInfo.GetCurrentMethod().Name, ex.Message);
+            }
+        }
+
+        /// <summary>
+        /// Scrolls the DataGrid even when mouse is not over it. 
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void Window_PreviewMouseWheel(object sender, MouseWheelEventArgs e)
+        {
+            try
+            {
+                if (Scroller.IsMouseOver == false)
+                {
+                    if (e.Delta < 0)
+                    {
+                        Scroller.LineDown();
+                        Scroller.LineDown();
+                        Scroller.LineDown();
+                    }
+
+                    if (e.Delta > 0)
+                    {
+                        Scroller.LineUp();
+                        Scroller.LineUp();
+                        Scroller.LineUp();
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                HandleException(MethodInfo.GetCurrentMethod().DeclaringType.Name, MethodInfo.GetCurrentMethod().Name, ex.Message);
+            }
+        }
+
+        /// <summary>
+        /// Close the 
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void SnackbarMessage_ActionClick(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                SnackbarMessage.IsActive = false;
+            }
+            catch (Exception ex)
+            {
+                HandleException(MethodInfo.GetCurrentMethod().DeclaringType.Name, MethodInfo.GetCurrentMethod().Name, ex.Message);
+            }
+        }
     }
 }

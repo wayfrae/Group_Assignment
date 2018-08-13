@@ -68,7 +68,7 @@ namespace Group_Assignment.Search
                 " ON ItemDesc.[ItemCode] = LineItems.[ItemCode]";
         }
 
-        public string SelectInvoiceData(bool one, bool two, bool three, string num, string date, string cost)
+        public string SelectInvoiceData( bool one, bool two, bool three, string num, string date, string cost)
         {
             if (one && !two && !three)
             {
