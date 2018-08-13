@@ -64,7 +64,7 @@ namespace Group_Assignment.Items
 
         private void ButtonClose_Click(object sender, RoutedEventArgs e)
         {
-            this.Close();
+            this.Hide();
         }
 
         private void ItemDataGrid_SelectionChanged(object sender, SelectionChangedEventArgs e)

@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespaceGroup_Assignment.Items"
         mc:Ignorable="d"
-        Title="wndItems" Height="450" Width="800">
+        Title="Edit Items" Height="603.814" Width="826.695">
     <Grid>
         <DataGrid x:Name="ItemDataGrid" Margin="256,57,0,0" SelectionChanged="ItemDataGrid_SelectionChanged" IsReadOnly="True"/>
         <Label Content="Item Code" HorizontalAlignment="Left" Margin="6,61,0,0" VerticalAlignment="Top" Width="76"/>
