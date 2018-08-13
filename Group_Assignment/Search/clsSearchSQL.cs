@@ -13,9 +13,22 @@ namespace Group_Assignment.Search
         /// </summary>
         /// <returns>All data for the invoices.</returns>
 
-        public string SelectAllInvoiceData()
+        public string SelectAll()
         {
-            string sSQL = "SELECT * FROM Invoices";
+            string sSQL = "SELECT * FROM ItemDesc";
+
+            return sSQL;
+        }
+
+
+        /// <summary>
+        /// This SQL gets all Ids for all invoices.
+        /// </summary>
+        /// <returns>All data for the invoices.</returns>
+
+        public string SelectAllId()
+        {
+            string sSQL = "SELECT InvoiceNum FROM LineItems";
 
             return sSQL;
         }

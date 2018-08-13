@@ -24,23 +24,24 @@
                 <ColumnDefinition MinWidth="300"/>
             </Grid.ColumnDefinitions>
 
-            <DataGrid Style="{StaticResource SearchDataGrid}" Grid.ColumnSpan="2" />
+            <DataGrid x:Name="displayGrid" Style="{StaticResource SearchDataGrid}" Grid.ColumnSpan="2"/>
             <StackPanel Grid.Column="2" Style="{StaticResource SearchStackPanel}" >
-                <ComboBox materialDesign:HintAssist.Hint="Tooltip Goes Here" />
-                <ComboBox materialDesign:HintAssist.Hint="Tooltip Goes Here" />
-                <ComboBox materialDesign:HintAssist.Hint="Tooltip Goes Here" />
-                <Grid Grid.Column="2" >
+                <ComboBox x:Name="InvoiceNum" materialDesign:HintAssist.Hint="Tooltip Goes Here" SelectionChanged="InvoiceNum_SelectionChanged" />
+                <ComboBox x:Name="InvoiceDate" materialDesign:HintAssist.Hint="Tooltip Goes Here" SelectionChanged="InvoiceDate_SelectionChanged" />
+                <ComboBox x:Name="InvoiceCharge" materialDesign:HintAssist.Hint="Tooltip Goes Here" SelectionChanged="InvoiceCharge_SelectionChanged" />
+                <Grid x:Name="CancelBtn" Grid.Column="2" >
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition/>
                         <ColumnDefinition/>
                     </Grid.ColumnDefinitions>
-                    <Button 
+                    <Button x:Name="SelectBtn" 
                         Content="Select" 
-                        Grid.Column="0"/>
+                        Grid.Column="0" Click="SelectBtn_Click"/>
                     <Button 
                         Content="Cancel"
                         Grid.Column="1" Click="Button_Click"/>
                 </Grid>
+                <Button x:Name="ClearBtn" Content="Clear" d:LayoutOverrides="Height" Width="100" Click="ClearBtn_Click"/>
             </StackPanel>
         </Grid>
     </DockPanel>

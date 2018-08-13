@@ -12,6 +12,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 
+
 namespace Group_Assignment.Search
 {
     /// <summary>
@@ -19,6 +20,7 @@ namespace Group_Assignment.Search
     /// </summary>
     public partial class wndSearch : Window
     {
+        clsSearchLogic logic;
         /// <summary>
         /// Holds the invoice selected from this window to be passed into the main window.
         /// </summary>
@@ -27,6 +29,9 @@ namespace Group_Assignment.Search
         public wndSearch()
         {
             InitializeComponent();
+            logic = new clsSearchLogic();
+            displayGrid.ItemsSource = logic.AllItems();
+            InvoiceNum.ItemsSource = logic.allId();
         }
 
         private void Button_Click(object sender, RoutedEventArgs e)
@@ -43,6 +48,37 @@ namespace Group_Assignment.Search
         {
             e.Cancel = true;
             this.Hide();
+        }
+
+        
+        /// <summary>
+        /// Updates the datagrid when selection is made
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void InvoiceNum_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+
+        }
+
+        private void InvoiceDate_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+
+        }
+
+        private void InvoiceCharge_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+
+        }
+
+        private void SelectBtn_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void ClearBtn_Click(object sender, RoutedEventArgs e)
+        {
+            displayGrid.ItemsSource = logic.AllItems();
         }
     }
 }
