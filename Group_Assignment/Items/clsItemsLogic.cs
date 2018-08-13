@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace WpfApp3
 {
-    class Item
+    class clsItemsLogic
     {
          
 
@@ -15,9 +15,9 @@ namespace WpfApp3
         public String ItemDesc { get; set; }
         public decimal? ItemPrice { get; set; }
 
-        public static List<Item> SelectItem()
+        public static List<clsItemsLogic> SelectItem()
         {
-            List<Item> items = new List<Item>();
+            List<clsItemsLogic> items = new List<clsItemsLogic>();
             using (OleDbConnection db = Database.GetConnection())
             {
                 db.Open();
@@ -26,14 +26,14 @@ namespace WpfApp3
                 OleDbDataReader read = command.ExecuteReader();
                 while (read.Read())
                 {
-                    items.Add(new Item() { ItemCode = read.GetString(0) ?? "", ItemDesc = read.GetString(1) ?? "", ItemPrice = read.GetDecimal(2) });
+                    items.Add(new clsItemsLogic() { ItemCode = read.GetString(0) ?? "", ItemDesc = read.GetString(1) ?? "", ItemPrice = read.GetDecimal(2) });
                 }
                 db.Close();
             }
             return items;
         }
 
-        public static bool DeleteItem(Item item)
+        public static bool DeleteItem(clsItemsLogic item)
         {
             return DeleteItem(item.ItemCode);
         }
@@ -50,7 +50,7 @@ namespace WpfApp3
             }
         }
 
-        public static bool SaveToDatabase(Item item)
+        public static bool SaveToDatabase(clsItemsLogic item)
         {
             using (OleDbConnection db = Database.GetConnection())
             {
@@ -64,17 +64,17 @@ namespace WpfApp3
             }
         }
 
-        public static bool SaveToDatabase(List<Item> items)
+        public static bool SaveToDatabase(List<clsItemsLogic> items)
         {
             bool flag = true;
-            foreach (Item item in items)
+            foreach (clsItemsLogic item in items)
             {
                 flag = SaveToDatabase(item);
             }
             return flag;
         }
 
-        public static bool UpdateItem(Item item)
+        public static bool UpdateItem(clsItemsLogic item)
         {
             if (item.ItemCode == null) return false;
             using (OleDbConnection db = Database.GetConnection())

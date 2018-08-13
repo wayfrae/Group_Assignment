@@ -29,7 +29,7 @@ namespace WpfApp1.Items
 
         void Onload()
         {
-            ItemDataGrid.ItemsSource = Item.SelectItem();
+            ItemDataGrid.ItemsSource = clsItemsLogic.SelectItem();
         }
 
         void Clear()
@@ -49,11 +49,11 @@ namespace WpfApp1.Items
 
         private void ButtonSave_Click(object sender, RoutedEventArgs e)
         {
-            Item it = new Item();
+            clsItemsLogic it = new clsItemsLogic();
             it.ItemCode = TextBoxCode.Text;
             it.ItemDesc = TextBoxDesc.Text;
             it.ItemPrice = Convert.ToDecimal(TextBoxCost.Text);
-            if (Item.UpdateItem(it))
+            if (clsItemsLogic.UpdateItem(it))
             {
                 MessageBox.Show("item Updated");
                 Clear();
@@ -71,7 +71,7 @@ namespace WpfApp1.Items
         private void ItemDataGrid_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             if (ItemDataGrid.SelectedValue == null) return;
-            Item it = (Item)ItemDataGrid.SelectedValue;
+            clsItemsLogic it = (clsItemsLogic)ItemDataGrid.SelectedValue;
             TextBoxCode.IsReadOnly = true;
             TextBoxCode.Text = it.ItemCode;
             TextBoxDesc.Text = it.ItemDesc;
