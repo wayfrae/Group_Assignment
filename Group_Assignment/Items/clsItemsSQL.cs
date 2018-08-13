@@ -15,7 +15,7 @@ namespace Group_Assignment.Items
         public static OleDbConnection GetConnection()
         {
             OleDbConnection conn = new OleDbConnection();
-            conn.ConnectionString = @"Provider=Microsoft.Jet.OLEDB.4.0;Data source= " + Directory.GetCurrentDirectory() + "\\Invoice.mdb";
+            conn.ConnectionString = @"Provider=Microsoft.Jet.OLEDB.4.0;Data source= " + Directory.GetCurrentDirectory() + "\\Database\\Invoice.mdb";
             return conn;
         }
 
