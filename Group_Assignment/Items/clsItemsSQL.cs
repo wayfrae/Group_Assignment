@@ -7,16 +7,17 @@ using System.Threading.Tasks;
 using System.IO;
 using System.Data.OleDb;
 using System.Reflection;
-namespace WpfApp3
+namespace Group_Assignment
 {
-    class Database
+    class clsItemsSQL
+
     {
-        public static OleDbConnection GetConnection()
-        {
-            OleDbConnection conn = new OleDbConnection();
-            conn.ConnectionString = @"Provider=Microsoft.Jet.OLEDB.4.0;Data source= " + Directory.GetCurrentDirectory() + "\\Invoice.mdb";
-            return conn;
-        }
+        //public static OleDbConnection GetConnection()
+        //{
+        //    OleDbConnection conn = new OleDbConnection();
+        //    conn.ConnectionString = @"Provider=Microsoft.Jet.OLEDB.4.0;Data source= " + Directory.GetCurrentDirectory() + "\\Invoice.mdb";
+        //    return conn;
+        //}
 
         public string select()
         {
