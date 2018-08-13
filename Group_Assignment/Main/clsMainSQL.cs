@@ -47,9 +47,9 @@ namespace Group_Assignment.Main
         /// <param name="invoiceNumber">invoice number to add</param>
         /// <param name="date">date to add</param>
         /// <returns>SQL insert string to add an entry to the Invoices table</returns>
-        public string InsertToInvoices(string invoiceNumber, DateTime date)
+        public string InsertToInvoices(DateTime date)
         {
-            return "INSERT INTO Invoices(InvoiceNum, Date) VALUES(" + invoiceNumber + ", " + date.Date.ToOADate() + ")";
+            return "INSERT INTO Invoices(InvoiceDate) VALUES(#" + date.Date.ToString("yyyy-MM-dd") + "#)";
         }
 
         /// <summary>
@@ -61,7 +61,7 @@ namespace Group_Assignment.Main
         /// <returns></returns>
         public string InsertToLineItems(string invoiceNumber, int position, string itemCode)
         {
-            return "INSERT INTO LineItems(InvoiceNum, LineItemNum, ItemCode) VALUES(" + invoiceNumber + ", " + position + ", " + itemCode + ")";
+            return "INSERT INTO LineItems(InvoiceNum, LineItemNum, ItemCode) VALUES(" + invoiceNumber + ", " + position + ", '" + itemCode + "')";
         }
 
          /// <summary>
@@ -73,7 +73,7 @@ namespace Group_Assignment.Main
          /// <returns></returns>
         public string UpdateLineItems(string invoiceNumber, int position, string itemCode)
         {
-            return "UPDATE LineItems SET LineItemNum=" + position + ", ItemCode=" + itemCode + "WHERE InvoiceNum=" + invoiceNumber;
+            return "UPDATE LineItems SET ItemCode='" + itemCode + "' WHERE InvoiceNum=" + invoiceNumber + " AND LineItemNum = " + position;
         }
 
         /// <summary>
@@ -84,9 +84,48 @@ namespace Group_Assignment.Main
         /// <returns>SQL update string to add an entry to the Invoices table</returns>
         public string UpdateInvoices(string invoiceNumber, DateTime date)
         {
-            return "UPDATE Invoices SET Date=" + date.Date.ToOADate() + " WHERE InvoiceNum=" + invoiceNumber;
+            return "UPDATE Invoices SET InvoiceDate=#" + date.Date.ToString("yyyy-MM-dd") + "# WHERE InvoiceNum=" + invoiceNumber;
         }
 
+        /// <summary>
+        /// Counts the number of line items on the invoice
+        /// </summary>
+        /// <param name="invoiceNumber">The invoice to count from</param>
+        /// <returns></returns>
+        public string CountItems(string invoiceNumber)
+        {
+            return "SELECT COUNT(*) FROM LineItems WHERE InvoiceNum=" + invoiceNumber;
+        }
 
+        /// <summary>
+        /// Returns a sql statement that deletes a line item with the specified invoice number and line position
+        /// </summary>
+        /// <param name="invoiceNumber">The invoice number to delete from</param>
+        /// <param name="position">The line position to delete.</param>
+        /// <returns>a sql statement that deletes a line item with the specified invoice number and line position</returns>
+        public string DeleteLineItem(string invoiceNumber, int position)
+        {
+            return "DELETE FROM LineItems WHERE InvoiceNum=" + invoiceNumber + " AND LineItemNum=" + position;
+        }
+
+        /// <summary>
+        /// Returns a sql statement that deletes all lines from the LineItems table.
+        /// </summary>
+        /// <param name="invoiceNumber">The invoice number to delete.</param>
+        /// <returns>a sql statement that deletes all lines from the LineItems table.</returns>
+        public string DeleteAllLineItems(string invoiceNumber)
+        {
+            return "DELETE FROM LineItems WHERE InvoiceNum=" + invoiceNumber;
+        }
+
+        /// <summary>
+        /// Returns a sql statement that deletes the specified invoice from the Invoices table
+        /// </summary>
+        /// <param name="invoiceNumber"></param>
+        /// <returns>a sql statement that deletes the specified invoice from the Invoices table</returns>
+        public string DeleteInvoice(string invoiceNumber)
+        {
+            return "DELETE FROM Invoices WHERE InvoiceNum=" + invoiceNumber;
+        }
     }
 }
