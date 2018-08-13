@@ -9,6 +9,8 @@ namespace WpfApp3
 {
     class Item
     {
+        Database sql = new Database();
+
         public String ItemCode { get; set; }
         public String ItemDesc { get; set; }
         public decimal? ItemPrice { get; set; }
@@ -20,7 +22,7 @@ namespace WpfApp3
             {
                 db.Open();
 
-                OleDbCommand command = new OleDbCommand("Select * from ItemDesc", db);
+                OleDbCommand command = new OleDbCommand(sql.select(), db);
                 OleDbDataReader read = command.ExecuteReader();
                 while (read.Read())
                 {

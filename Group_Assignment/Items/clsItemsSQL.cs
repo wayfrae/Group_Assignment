@@ -17,5 +17,10 @@ namespace WpfApp3
             conn.ConnectionString = @"Provider=Microsoft.Jet.OLEDB.4.0;Data source= " + Directory.GetCurrentDirectory() + "\\Invoice.mdb";
             return conn;
         }
+
+        public string select() {
+            return "Select* from ItemDesc";
+        }
+
     }
 }
