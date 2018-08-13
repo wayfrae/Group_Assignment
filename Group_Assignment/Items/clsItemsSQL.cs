@@ -12,12 +12,12 @@ namespace Group_Assignment.Items
     class clsItemsSQL
 
     {
-        //public static OleDbConnection GetConnection()
-        //{
-        //    OleDbConnection conn = new OleDbConnection();
-        //    conn.ConnectionString = @"Provider=Microsoft.Jet.OLEDB.4.0;Data source= " + Directory.GetCurrentDirectory() + "\\Invoice.mdb";
-        //    return conn;
-        //}
+        public static OleDbConnection GetConnection()
+        {
+            OleDbConnection conn = new OleDbConnection();
+            conn.ConnectionString = @"Provider=Microsoft.Jet.OLEDB.4.0;Data source= " + Directory.GetCurrentDirectory() + "\\Invoice.mdb";
+            return conn;
+        }
 
         public string select()
         {

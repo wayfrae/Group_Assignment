@@ -9,7 +9,10 @@ namespace Group_Assignment.Items
 {
     class clsItemsLogic
     {
-
+        /// <summary>
+        /// boolean value that checks if an item is in an invoice
+        /// </summary>
+        public bool isininvoice;
 
         public String ItemCode { get; set; }
         public String ItemDesc { get; set; }
