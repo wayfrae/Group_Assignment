@@ -21,6 +21,63 @@ namespace Group_Assignment.Search
         /// </summary>
         clsSearchSQL sql;
 
+        private List<Item> hiddenList;
+
+        public List<Item> displayList
+        {
+            get
+            {
+                return this.hiddenList;
+            }
+            set
+            {
+                this.hiddenList = value;
+            }
+        }
+
+        private List<string> hiddenNum;
+
+        public List<string> displayNum
+        {
+            get
+            {
+                return this.hiddenNum;
+            }
+            set
+            {
+                this.hiddenNum = value;
+            }
+        }
+
+
+        private List<string> hiddenDate;
+
+        public List<string> displayDate
+        {
+            get
+            {
+                return this.hiddenDate;
+            }
+            set
+            {
+                this.hiddenDate = value;
+            }
+        }
+
+        private List<string> hiddenCost;
+
+        public List<string> displayCost
+        {
+            get
+            {
+                return this.hiddenCost;
+            }
+            set
+            {
+                this.hiddenCost = value;
+            }
+        }
+
         /// <summary>
         /// Constructor for the logic class.
         /// </summary>
@@ -28,6 +85,10 @@ namespace Group_Assignment.Search
         {
             db = new clsDataAccess();
             sql = new clsSearchSQL();
+            this.displayList = AllItems();
+            this.displayNum = allInvoiceNum();
+            this.displayDate = allInvoiceDate();
+            this.displayCost = allInvoiceCost();
         }
 
         /// <summary>
@@ -52,29 +113,52 @@ namespace Group_Assignment.Search
         }
 
         /// <summary>
-        /// This returns a list of all InvoiceIds
+        /// This returns a list of all InvoiceNums
         /// </summary>
         /// <returns></returns>
-        public List<Item> allId()
+        public List<string> allInvoiceNum()
         {
-            List<Item> list = new List<Item>();
+            List<string> list = new List<string>();
             int numRows = 0;
             DataSet data = new DataSet();
-            data = this.db.ExecuteSQLStatement(sql.SelectAllId(), ref numRows);
+            data = this.db.ExecuteSQLStatement(sql.SelectAllNum(), ref numRows);
             for (int i = 0; i < numRows; i++)
             {
-                list.Add(new Item
-                {
-                    Code = data.Tables[0].Rows[i][0].ToString()
-
-                });
+                list.Add(data.Tables[0].Rows[i][0].ToString());
             }
             return list;
         }
 
-        //These properties will be used to transfer data
-        public String getInvoiceId { get; set; }
-        public String getInvoiceDate { get; set; }
-        public String GetId { get; set; }
+
+
+        /// <summary>
+        /// This returns a list of invoice dates
+        /// </summary>
+        /// <returns></returns>
+        public List<string> allInvoiceDate()
+        {
+            List<string> list = new List<string>();
+            int numRows = 0;
+            DataSet data = new DataSet();
+            data = this.db.ExecuteSQLStatement(sql.SelectAllDate(), ref numRows);
+            for (int i = 0; i < numRows; i++)
+            {
+                list.Add(data.Tables[0].Rows[i][0].ToString());
+            }
+            return list;
+        }
+
+        public List<string> allInvoiceCost()
+        {
+            List<string> list = new List<string>();
+            int numRows = 0;
+            DataSet data = new DataSet();
+            data = this.db.ExecuteSQLStatement(sql.SelectAllCost(), ref numRows);
+            for (int i = 0; i < numRows; i++)
+            {
+                list.Add(data.Tables[0].Rows[i][0].ToString());
+            }
+            return list;
+        }
     }
 }

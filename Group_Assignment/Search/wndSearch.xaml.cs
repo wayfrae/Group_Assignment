@@ -30,8 +30,7 @@ namespace Group_Assignment.Search
         {
             InitializeComponent();
             logic = new clsSearchLogic();
-            displayGrid.ItemsSource = logic.AllItems();
-            InvoiceNum.ItemsSource = logic.allId();
+            this.DataContext = logic;
         }
 
         private void Button_Click(object sender, RoutedEventArgs e)

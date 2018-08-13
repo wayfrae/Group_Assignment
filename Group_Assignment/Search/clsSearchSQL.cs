@@ -22,49 +22,36 @@ namespace Group_Assignment.Search
 
 
         /// <summary>
-        /// This SQL gets all Ids for all invoices.
+        /// This SQL gets all Nums for all invoices.
         /// </summary>
         /// <returns>All data for the invoices.</returns>
 
-        public string SelectAllId()
+        public string SelectAllNum()
         {
-            string sSQL = "SELECT InvoiceNum FROM LineItems";
+            string sSQL = "SELECT DISTINCT InvoiceNum FROM Invoices";
 
             return sSQL;
         }
-        /// <summary>
-        /// This SQL gets all data on an invoice for a given InvoiceID.
-        /// </summary>
-        /// <param name="sInvoiceID">The InvoiceID for the invoice to retrieve all data.</param>
-        /// <returns>All data for the given invoice.</returns>
 
-        public string SelectIdInvoiceData(string sInvoiceID)
+        /// <summary>
+        /// This SQL gets all dates for all invoices
+        /// </summary>
+        /// <returns></returns>
+        public string SelectAllDate()
         {
-            string sSQL = "SELECT * FROM Invoices WHERE InvoiceNum = " + sInvoiceID;
+            string sSQL = "SELECT DISTINCT InvoiceDate FROM Invoices";
 
             return sSQL;
         }
+
+
         /// <summary>
-        /// This SQL gets all data on an invoice for all invoices on a given InvoiceDate.
+        /// This SQL gets all costs for all invoices
         /// </summary>
-        /// <param name="sInvoiceDate">The InvoiceDate for the invoice to retrieve all data.</param>
-        /// <returns>All data for the given InvoiceDate.</returns>
-
-        public string SelectDateInvoiceData(string sInvoiceDate)
+        /// <returns></returns>
+        public string SelectAllCost()
         {
-            string sSQL = "SELECT * FROM Invoices WHERE InvoiceDate = " + sInvoiceDate;
-
-            return sSQL;
-        }
-        /// <summary>
-        /// This SQL gets all data on an invoice for all invoices with an ItemCode.
-        /// </summary>
-        /// <param name="sItemCode">The ItemCode for the invoice to retrieve all data.</param>
-        /// <returns>All data for the given ItemCode.</returns>
-
-        public string SelectCodeInvoiceData(string sItemCode)
-        {
-            string sSQL = "SELECT * FROM Invoices i JOIN LineItems l on i.InvoiceNum = l.InvoiceNum WHERE ItemCode = " + sItemCode;
+            string sSQL = "SELECT DISTINCT Cost FROM ItemDesc";
 
             return sSQL;
         }

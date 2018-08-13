@@ -24,11 +24,11 @@
                 <ColumnDefinition MinWidth="300"/>
             </Grid.ColumnDefinitions>
 
-            <DataGrid x:Name="displayGrid" Style="{StaticResource SearchDataGrid}" Grid.ColumnSpan="2"/>
+            <DataGrid x:Name="displayGrid" ItemsSource="{Binding displayList}" Style="{StaticResource SearchDataGrid}" Grid.ColumnSpan="2"/>
             <StackPanel Grid.Column="2" Style="{StaticResource SearchStackPanel}" >
-                <ComboBox x:Name="InvoiceNum" materialDesign:HintAssist.Hint="Tooltip Goes Here" SelectionChanged="InvoiceNum_SelectionChanged" />
-                <ComboBox x:Name="InvoiceDate" materialDesign:HintAssist.Hint="Tooltip Goes Here" SelectionChanged="InvoiceDate_SelectionChanged" />
-                <ComboBox x:Name="InvoiceCharge" materialDesign:HintAssist.Hint="Tooltip Goes Here" SelectionChanged="InvoiceCharge_SelectionChanged" />
+                <ComboBox x:Name="InvoiceNum" ItemsSource="{Binding displayNum}" materialDesign:HintAssist.Hint="Tooltip Goes Here" SelectionChanged="InvoiceNum_SelectionChanged" />
+                <ComboBox x:Name="InvoiceDate" ItemsSource="{Binding displayDate}" materialDesign:HintAssist.Hint="Tooltip Goes Here" SelectionChanged="InvoiceDate_SelectionChanged" />
+                <ComboBox x:Name="InvoiceCharge" ItemsSource="{Binding displayCost}" materialDesign:HintAssist.Hint="Tooltip Goes Here" SelectionChanged="InvoiceCharge_SelectionChanged" />
                 <Grid x:Name="CancelBtn" Grid.Column="2" >
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition/>
