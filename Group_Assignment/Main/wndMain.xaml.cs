@@ -80,10 +80,10 @@ namespace Group_Assignment
                 windowItems.ShowDialog();
                 //TODO: Check the flag for an update and update the items dropdown if there was a change
                 //check if there was a change to the items, if there was a change update the items dropdown
-                //if(windowItems.HasChanged == true)
-                //{
-                //    mainLogic.GetItems();
-                //}
+                if(windowItems.HasChanged == true)
+                {
+                    mainLogic.GetItems();
+                }
                 this.Left = windowItems.Left;
                 this.Top = windowItems.Top;
                 this.Show();
@@ -110,7 +110,10 @@ namespace Group_Assignment
                 windowSearch.ShowDialog();
                 //TODO: Get the selected invoice and display it
                 //get the invoice selected by the search
-                //mainLogic.CurrentInvoice = mainLogic.GetInvoice(windowSearch.InvoiceNumber);
+                if(windowSearch.InvoiceNumber != null)
+                {
+                    mainLogic.CurrentInvoice = mainLogic.GetInvoice(windowSearch.InvoiceNumber);
+                }
                 this.Left = windowSearch.Left;
                 this.Top = windowSearch.Top;
                 this.Show();
